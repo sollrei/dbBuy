@@ -6,6 +6,7 @@ import {
 import Company from './company/company';
 import Product from './product/product';
 import More from './more/more';
+import Chat from './chat/chat';
 
 export class Index extends Component {
     constructor (props) {
@@ -87,7 +88,7 @@ export class Index extends Component {
                             })
                         }}
                     >
-                        <View><Text>12</Text></View>
+                        <Chat navigator={this.props.navigator} />
                     </TabBarIOS.Item>
                     <TabBarIOS.Item
                         title="我"

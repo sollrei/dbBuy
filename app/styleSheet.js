@@ -143,5 +143,40 @@ export const styles = StyleSheet.create({
         position: 'absolute',
         right: 12,
         lineHeight: 59
+    },
+    // chat
+    chatWrap: {
+        backgroundColor: '#f3f3f3',
+        flex: 1
+    },
+    chatNav: {
+        paddingTop: 30,
+        paddingBottom: 8,
+        alignItems: 'center'
+    },
+    chatAvatar: {
+        height: 36,
+        width: 36,
+        marginRight: 12
+    },
+    chatList: {
+        backgroundColor: '#fff',
+        flex: 1
+    },
+    chatMessage: {
+        flexDirection: 'row',
+        height: 72,
+        alignItems: 'center',
+        paddingHorizontal: 12
+    },
+    chatTitle: {
+        fontSize: 17,
+        marginBottom: 7
+    },
+    chatMsg: {
+        color: '#999'
+    },
+    chatDetailWrap: {
+        flex: 1
     }
 });

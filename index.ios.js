@@ -12,16 +12,17 @@ import {
     View,
     Navigator
 } from 'react-native';
-import {Index} from './app/index';
+import IndexNav from './app/indexNav';
 
 class testProject extends Component {
+
     render() {
         return (
             <View style={styles.container}>
                 <Navigator
                     initialRoute={{
                         name: 'home',
-                        component: Index
+                        component: IndexNav
                     }}
                     renderScene={(route, navigator) => {
                         let C = route.component;
@@ -29,6 +30,7 @@ class testProject extends Component {
                             return <C {...route.passProps} navigator={navigator} title={route.name} />
                         }
                     }}
+                    style={{flex: 1}}
                 />
             </View>
         );
