@@ -16,15 +16,10 @@ let defaultUser = {
 };
 
 
-export function setLogin () {
-    console.log('set login');
-    return function (dispatch) {
-        setTimeout(function () {
-            dispatch({
-                type: USER_REGISTERED,
-                user: testUser
-            })
-        }, 1000)
+export function setLogin (user) {
+    return {
+        type: USER_REGISTERED,
+        user: user
     }
 }
 

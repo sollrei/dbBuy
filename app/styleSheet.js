@@ -178,5 +178,56 @@ export const styles = StyleSheet.create({
     },
     chatDetailWrap: {
         flex: 1
+    },
+    // login page
+    loginInput: {
+        height: 50,
+        lineHeight: 48,
+        backgroundColor: '#fff',
+        paddingLeft: 10
+    },
+    submitButton: {
+        height: 50,
+        marginTop: 10,
+        marginHorizontal: 10,
+        backgroundColor: '#0078FF'
+    },
+    submitText: {
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: 19,
+        lineHeight: 50
+    },
+    modalLayer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    },
+    modalBox: {
+        borderRadius: 10,
+        backgroundColor: '#fff',
+        width: 200,
+        height: 80
+    },
+    modalText: {
+        borderRadius: 10,
+        lineHeight: 80,
+        backgroundColor: '#fff',
+        textAlign: 'center'
+    },
+    // my
+    myNav: {
+        flexDirection: 'row',
+    },
+    myNavItem: {
+        flex: 1,
+        height: 60,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    mCount: {
+        marginBottom: 8
     }
 });

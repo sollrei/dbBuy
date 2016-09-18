@@ -7,12 +7,12 @@ import {
 } from 'react-native';
 
 import { connect } from 'react-redux';
-import * as actions from  './store/action';
 
 import Company from './company/company';
 import Product from './product/product';
 import More from './more/more';
 import Chat from './chat/chat';
+import My from './my/my';
 
 class Index extends Component {
     constructor (props) {
@@ -37,10 +37,6 @@ class Index extends Component {
                 }}
             />
         )
-    }
-
-    setUserInfo (data) {
-
     }
 
     render () {
@@ -112,7 +108,7 @@ class Index extends Component {
                             })
                         }}
                     >
-                        <View><Text>12</Text></View>
+                        <My {...this.props}/>
                     </TabBarIOS.Item>
                 </TabBarIOS>
             </View>

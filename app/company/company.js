@@ -13,15 +13,12 @@ import {
 import {styles} from '../styleSheet';
 
 import Hot from './hot';
-
-import * as actions from '../store/action';
+import LoginPage from '../page/login';
 
 export default class Company extends Component {
 
 
     render () {
-
-        console.log(this.props.user)
 
         return (
             <View style={styles.container}>
@@ -44,7 +41,23 @@ export default class Company extends Component {
                         <View style={styles.iconWrap}>
                             <TouchableOpacity
                                 onPress={() => {
-                                    this.props.dispatch(actions.setLogin());
+                                    const {user} = this.props;
+                                    if (!user.login) {
+                                        AlertIOS.alert('请先登录', '',
+                                        [{
+                                           text: '返回'
+                                        },{
+                                            text: '去登录',
+                                            onPress: () => {
+                                                this.props.navigator.push({
+                                                    title: '加入大白采购',
+                                                    component: LoginPage,
+                                                    navigationBarHidden: false,
+                                                    passProps: {...this.props}
+                                                });
+                                            }
+                                        }]);
+                                    }
                                 }}
                                 style={styles.iconItem}
                             >
@@ -70,7 +83,7 @@ export default class Company extends Component {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <Hot />
+                    <Hot navigator={this.props.navigator} />
                 </ScrollView>
             </View>
         )
