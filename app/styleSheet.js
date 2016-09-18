@@ -15,6 +15,13 @@ export const styles = StyleSheet.create({
         borderBottomColor: '#e0e0e0',
         borderBottomWidth: 1
     },
+    rLine: {
+        borderRightColor: '#e0e0e0',
+        borderRightWidth: 1
+    },
+    mr1: {
+        marginRight: 1
+    },
     // index
     topWrap: {
         flex: 1
@@ -219,6 +226,7 @@ export const styles = StyleSheet.create({
     // my
     myNav: {
         flexDirection: 'row',
+        marginBottom: 16
     },
     myNavItem: {
         flex: 1,
@@ -228,6 +236,13 @@ export const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     mCount: {
-        marginBottom: 8
+        marginBottom: 8,
+        height: 20
+    },
+    mCText: {
+        lineHeight: 20
+    },
+    mRow: {
+
     }
 });

@@ -27,22 +27,28 @@ export default class My extends Component {
                         </Image>
                     </View>
                     <View style={styles.myNav}>
-                        <View style={styles.myNavItem}>
-                            <Text style={styles.mCount}>0</Text>
+                        <View style={[styles.myNavItem, styles.mr1]}>
+                            <Text style={[styles.mCount, styles.mCText]}>0</Text>
                             <Text>企业收藏</Text>
                         </View>
-                        <View style={styles.myNavItem}>
-                            <Text style={styles.mCount}>0</Text>
+                        <View style={[styles.myNavItem, styles.mr1]}>
+                            <Text style={[styles.mCount, styles.mCText]}>0</Text>
                             <Text>产品收藏</Text>
                         </View>
-                        <View style={styles.myNavItem}>
-                            <Text style={styles.mCount}>0</Text>
+                        <View style={[styles.myNavItem, styles.mr1]}>
+                            <Text style={[styles.mCount, styles.mCText]}>0</Text>
                             <Text>广场收藏</Text>
                         </View>
                         <View style={styles.myNavItem}>
-                            <Text>0</Text>
+                            <Image
+                                style={styles.mCount}
+                                source={require('image!icon_ft')}
+                            />
                             <Text>足迹</Text>
                         </View>
+                    </View>
+                    <View>
+                        <View></View>
                     </View>
                 </ScrollView>
             </View>
