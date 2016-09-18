@@ -1,14 +1,20 @@
 import React, {Component} from 'react';
 import {
-    View, Text, TabBarIOS, NavigatorIOS
+    View,
+    Text,
+    TabBarIOS,
+    NavigatorIOS
 } from 'react-native';
+
+import { connect } from 'react-redux';
+import * as actions from  './store/action';
 
 import Company from './company/company';
 import Product from './product/product';
 import More from './more/more';
 import Chat from './chat/chat';
 
-export class Index extends Component {
+class Index extends Component {
     constructor (props) {
         super(props);
 
@@ -33,7 +39,12 @@ export class Index extends Component {
         )
     }
 
+    setUserInfo (data) {
+
+    }
+
     render () {
+
         return (
             <View style={{flex: 1}}>
                 <TabBarIOS
@@ -49,7 +60,7 @@ export class Index extends Component {
                             })
                         }}
                     >
-                        <Company />
+                        <Company {...this.props}/>
                     </TabBarIOS.Item>
                     <TabBarIOS.Item
                         title="找产品"
@@ -108,3 +119,17 @@ export class Index extends Component {
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        user: state.user
+    }
+};
+
+const ConnectedIndex = connect(mapStateToProps)(Index);
+
+export default ConnectedIndex;
+
+
+
+

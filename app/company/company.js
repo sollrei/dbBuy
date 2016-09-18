@@ -1,18 +1,28 @@
 import React, {Component} from 'react';
 import {
-    View, ScrollView,
-    Image, Text, TextInput,
-    Dimensions, TouchableOpacity
+    View,
+    ScrollView,
+    Image,
+    Text,
+    TextInput,
+    Dimensions,
+    TouchableOpacity,
+    AlertIOS
 } from 'react-native';
 
 import {styles} from '../styleSheet';
 
 import Hot from './hot';
 
+import * as actions from '../store/action';
+
 export default class Company extends Component {
 
 
     render () {
+
+        console.log(this.props.user)
+
         return (
             <View style={styles.container}>
                 <ScrollView style={{marginTop: -20}}>
@@ -32,7 +42,12 @@ export default class Company extends Component {
                             />
                         </View>
                         <View style={styles.iconWrap}>
-                            <TouchableOpacity style={styles.iconItem}>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    this.props.dispatch(actions.setLogin());
+                                }}
+                                style={styles.iconItem}
+                            >
                                 <Image
                                     style={styles.iconImage}
                                     source={require('image!icon_camera')}
