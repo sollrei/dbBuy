@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import {
-    View, ScrollView,
-    Image, Text, TextInput,
+    View,
+    ScrollView,
+    Image,
+    Text,
+    TextInput,
     TouchableOpacity
 } from 'react-native';
 
@@ -10,7 +13,6 @@ import {styles} from '../styleSheet';
 import Cate from './cate';
 
 export default class Product extends Component {
-
 
     render () {
         return (

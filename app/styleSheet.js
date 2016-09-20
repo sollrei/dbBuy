@@ -22,6 +22,9 @@ export const styles = StyleSheet.create({
     mr1: {
         marginRight: 1
     },
+    mb1: {
+        marginBottom: 1
+    },
     // index
     topWrap: {
         flex: 1
@@ -235,6 +238,25 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
+    myAvatar: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 1
+    },
+    mAvatar: {
+        height: 62,
+        width: 62,
+        borderRadius: 31,
+        borderColor: '#fff',
+        borderWidth: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'transparent'
+    },
+    mAvatarText: {
+        color: '#fff',
+        fontSize: 11
+    },
     mCount: {
         marginBottom: 8,
         height: 20
@@ -242,7 +264,27 @@ export const styles = StyleSheet.create({
     mCText: {
         lineHeight: 20
     },
+    mCTitle: {
+        color: '#666'
+    },
     mRow: {
-
+        height: 46,
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        paddingLeft: 12
+    },
+    mRowImage: {
+        marginRight: 12,
+        height: 24,
+        width: 24
+    },
+    mRowText: {
+        fontSize: 17
+    },
+    arrow: {
+        position: 'absolute',
+        right: 12,
+        top: 15
     }
 });

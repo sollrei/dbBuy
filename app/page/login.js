@@ -4,7 +4,6 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    AlertIOS,
     Modal
 } from 'react-native';
 
@@ -64,11 +63,18 @@ export default class LoginPage extends Component {
                         })
                             .then((response) => response.json())
                             .then((responseJson) => {
-                                this.props.dispatch(actions.setLogin(responseJson));
-                                this.setState({
-                                    modalVisible: false
-                                });
-                                this.props.navigator.pop();
+                                setTimeout(() => {
+                                    console.log('login event', responseJson);
+
+                                    this.props.dispatch(actions.setLogin(responseJson));
+
+                                    this.setState({
+                                        modalVisible: false
+                                    });
+
+                                    this.props.navigator.pop();
+
+                                }, 1000);
                             })
                     }}
                 >
