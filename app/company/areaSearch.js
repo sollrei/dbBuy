@@ -12,6 +12,7 @@ import {
 
 import {styles} from '../styleSheet';
 import SearchPage from './searchPage';
+import SearchResult from './searchResult';
 
 export default class AreaSearch extends Component {
 
@@ -137,9 +138,21 @@ export default class AreaSearch extends Component {
                             />
                         </View>
                     </TouchableOpacity>
-                    <View style={sty.sSubmit}>
+                    <TouchableOpacity
+                        style={sty.sSubmit}
+                        onPress={() => {
+                            this.props.navigator.push({
+                                title: '区间查询结果',
+                                component: SearchResult,
+                                navigationBarHidden: false,
+                                passProps: {
+                                    data: {...this.state}
+                                }
+                            })
+                        }}
+                    >
                         <Text style={{fontSize: 17, color: '#fff'}}>查找</Text>
-                    </View>
+                    </TouchableOpacity>
                 </ScrollView>
             </View>
         )
