@@ -14,6 +14,8 @@ import {styles} from '../styleSheet';
 
 import Hot from './hot';
 import LoginPage from '../page/login';
+import Search from './search';
+import AreaSearch from './areaSearch';
 
 export default class Company extends Component {
 
@@ -74,7 +76,16 @@ export default class Company extends Component {
                                 />
                                 <Text>周边查询</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.iconItem}>
+                            <TouchableOpacity
+                                style={styles.iconItem}
+                                onPress={() => {
+                                    this.props.navigator.push({
+                                        title: '区间查询',
+                                        component: AreaSearch,
+                                        navigationBarHidden: false
+                                    });
+                                }}
+                            >
                                 <Image
                                     style={styles.iconImage}
                                     source={require('image!icon_area')}
