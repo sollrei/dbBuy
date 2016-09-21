@@ -5,9 +5,10 @@ import {
     Image,
     Text,
     TextInput,
-    Dimensions,
     TouchableOpacity,
-    AlertIOS
+    AlertIOS,
+    StyleSheet,
+    Dimensions
 } from 'react-native';
 
 import {styles} from '../styleSheet';
@@ -16,9 +17,18 @@ import Hot from './hot';
 import LoginPage from '../page/login';
 import Search from './search';
 import AreaSearch from './areaSearch';
+import CameraSearch from './cameraSearch';
+import MapSearch from './mapSearch';
+
 
 export default class Company extends Component {
 
+    constructor (props) {
+        super(props);
+        this.state = {
+            img: ''
+        }
+    }
 
     render () {
 
@@ -59,6 +69,12 @@ export default class Company extends Component {
                                                 });
                                             }
                                         }]);
+                                    } else {
+                                        this.props.navigator.push({
+                                            title: '拍照查询',
+                                            component: CameraSearch,
+                                            navigationBarHidden: false
+                                        })
                                     }
                                 }}
                                 style={styles.iconItem}
@@ -69,7 +85,15 @@ export default class Company extends Component {
                                 />
                                 <Text>拍照查询</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.iconItem}>
+                            <TouchableOpacity
+                                style={styles.iconItem}
+                                onPress={() => {
+                                    this.props.navigator.push({
+                                        title: '周边查询',
+                                        component: MapSearch
+                                    })
+                                }}
+                            >
                                 <Image
                                     style={styles.iconImage}
                                     source={require('image!icon_around')}
@@ -94,10 +118,13 @@ export default class Company extends Component {
                             </TouchableOpacity>
                         </View>
                     </View>
+
                     <Hot navigator={this.props.navigator} />
                 </ScrollView>
             </View>
         )
     }
 
+
 }
+
