@@ -69,7 +69,7 @@ class Index extends Component {
                             })
                         }}
                     >
-                        <Product />
+                        <Product navigator={this.props.navigator} />
                     </TabBarIOS.Item>
                     <TabBarIOS.Item
                         title="精彩"

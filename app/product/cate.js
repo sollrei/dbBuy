@@ -1,14 +1,25 @@
 import React, {Component} from 'react';
 import {
-    View, ScrollView,
-    Image, Text, TextInput,
-    Dimensions, TouchableOpacity
+    View,
+    ScrollView,
+    Image,
+    Text,
+    TextInput,
+    Dimensions,
+    TouchableOpacity
 } from 'react-native';
 
 import {styles} from '../styleSheet';
 
+import ProductList from './productList';
 
 export default class Cate extends Component {
+
+    constructor (props) {
+        super(props);
+
+        this.renderCateItem = this.renderCateItem.bind(this);
+    }
 
     renderCateItem (data) {
 
@@ -17,7 +28,15 @@ export default class Cate extends Component {
                 style={styles.cateItemWrap}
                 key={index}
             >
-                <TouchableOpacity style={styles.cateItem}>
+                <TouchableOpacity
+                    style={styles.cateItem}
+                    onPress={() => {
+                        this.props.navigator.push({
+                            component: ProductList,
+                            title: ''
+                        })
+                    }}
+                >
                     <Text style={styles.darkColor}>{item}</Text>
                 </TouchableOpacity>
                 <View style={{width: 1,height: 14,backgroundColor: '#e0e0e0'}}></View>

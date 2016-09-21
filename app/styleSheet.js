@@ -11,6 +11,12 @@ export const styles = StyleSheet.create({
     darkColor: {
         color: '#666'
     },
+    primaryColor: {
+        color: '#0078FF'
+    },
+    grayColor: {
+        color: '#999'
+    },
     line: {
         borderBottomColor: '#e0e0e0',
         borderBottomWidth: 1
@@ -24,6 +30,12 @@ export const styles = StyleSheet.create({
     },
     mb1: {
         marginBottom: 1
+    },
+    ft16: {
+        fontSize: 16
+    },
+    ft17: {
+        fontSize: 17
     },
     // index
     topWrap: {

@@ -50,7 +50,7 @@ export default class Product extends Component {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <Cate />
+                    <Cate navigator={this.props.navigator}/>
                 </ScrollView>
             </View>
         )
