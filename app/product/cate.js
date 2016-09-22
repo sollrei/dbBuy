@@ -17,8 +17,6 @@ export default class Cate extends Component {
 
     constructor (props) {
         super(props);
-
-        this.renderCateItem = this.renderCateItem.bind(this);
     }
 
     renderCateItem (data) {

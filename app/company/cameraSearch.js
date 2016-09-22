@@ -26,7 +26,7 @@ export default class CameraSearch extends Component {
         }
     }
 
-    takePicture() {
+    takePicture = () => {
         this.camera.capture()
             .then((data) => {
                 console.log(data);
@@ -35,7 +35,7 @@ export default class CameraSearch extends Component {
                 })
             })
             .catch(err => console.error(err));
-    }
+    };
 
     render () {
         return (
@@ -51,7 +51,7 @@ export default class CameraSearch extends Component {
                     >
                         <TouchableOpacity
                             style={sty.capture}
-                            onPress={this.takePicture.bind(this)}
+                            onPress={this.takePicture}
                         >
                             <Text>[CAPTURE]</Text>
                         </TouchableOpacity>
