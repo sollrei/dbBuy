@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 
 import {styles} from '../styleSheet';
+import ProductDetail from './productDetail';
 
 export default class ProductList extends Component {
 
@@ -18,6 +19,8 @@ export default class ProductList extends Component {
         super(props);
 
         let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
+        this.renderRow = this.renderRow.bind(this);
 
         this.state = {
             dataSource: ds.cloneWithRows([{
@@ -36,7 +39,16 @@ export default class ProductList extends Component {
 
     renderRow (rowData) {
         return (
-            <TouchableOpacity style={sty.listItem}>
+            <TouchableOpacity
+                style={sty.listItem}
+                onPress={() => {
+                    this.props.navigator.push({
+                        title: '产品详情',
+                        component: ProductDetail,
+                        navigationBarHidden: false
+                    })
+                }}
+            >
                 <View style={{padding: 2}}>
                     <Image
                         style={{height: 88, width: 88}}
