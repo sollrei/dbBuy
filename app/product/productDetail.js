@@ -9,13 +9,15 @@ import {
     Dimensions,
     StyleSheet
 } from 'react-native';
+
 import Swiper from 'react-native-swiper';
 
 import {styles} from '../styleSheet';
 
-const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
+const {width: screenWidth} = Dimensions.get('window');
 
 export default class ProductDetail extends Component {
+
     constructor (props) {
         super(props);
     }
@@ -30,7 +32,6 @@ export default class ProductDetail extends Component {
                                 style={{height: 200, width: screenWidth}}
                                 source={{uri: 'https://img10.cn.gcimg.net/gcwthird/day_20160809/256c4067e3i2edebcada9l88a9b37f57.jpg-350x350.jpg'}}
                                 resizeMode='contain'
-
                             />
                         </View>
                         <View style={sty.proImage}>
@@ -38,7 +39,6 @@ export default class ProductDetail extends Component {
                                 style={{height: 200, width: screenWidth}}
                                 source={{uri: 'https://img10.cn.gcimg.net/gcwthird/day_20160809/8bba6bde4dd08c80443f2xc82983de94.jpg-normalone'}}
                                 resizeMode='contain'
-
                             />
                         </View>
                     </Swiper>

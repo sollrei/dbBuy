@@ -1,6 +1,7 @@
 export default config = {
     userUrl: 'http://192.168.12.47/user.json',
     hotContentUrl: 'http://192.168.12.47/content.json',
+    productListUrl: 'http://192.168.12.47/rndata/productlist.json',
     searchCompany: {
         year: [{
             id: 0,

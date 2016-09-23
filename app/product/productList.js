@@ -3,15 +3,20 @@ import {
     View,
     ListView,
     ScrollView,
+    ActivityIndicator,
     Image,
     Text,
     TextInput,
     TouchableOpacity,
-    StyleSheet
+    StyleSheet,
+    Dimensions
 } from 'react-native';
 
 import {styles} from '../styleSheet';
 import ProductDetail from './productDetail';
+import config from '../data/config';
+
+const {width} = Dimensions.get('window');
 
 export default class ProductList extends Component {
 
@@ -20,38 +25,51 @@ export default class ProductList extends Component {
 
         let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-        this.renderRow = this.renderRow.bind(this);
+        this.ds = ds;
+        this.da = [];
 
         this.state = {
-            dataSource: ds.cloneWithRows([{
-                title: '带USB插座插排插线板接线板拖插板双控过载独立开带USB插座插排插线板接线板拖插板双控过载独立开带USB插座插排插线板接线板拖插板双控过载独立开...',
-                city: '黑龙江',
-                price: '¥25.90',
-                image: 'https://img10.cn.gcimg.net/gcwthird/day_20160916/d082972ec9k2577068a4aa3275cf1a1d.jpg-350x350.jpg'
-            },{
-                title: '带USB插座插排插线板接线板拖插板双控过载独立开带USB插座插排插线板接线板拖插板双控过载独立开带USB插座插排插线板接线板拖插板双控过载独立开...',
-                city: '黑龙江',
-                price: '¥25.90',
-                image: 'https://img10.cn.gcimg.net/gcwthird/day_20160916/d082972ec9k2577068a4aa3275cf1a1d.jpg-350x350.jpg'
-            }])
+            dataSource: ds.cloneWithRows(this.da),
+            showType: 'grid',
+            itemType: 'gridItem',
+            animating: true
         }
+
     }
 
-    renderRow (rowData) {
+    componentWillMount () {
+        fetch(config.productListUrl)
+            .then((res) => res.json())
+            .then((res) => {
+
+                setTimeout(() => {
+                    this.da = res.data;
+                    this.setState({
+                        dataSource: this.ds.cloneWithRows(this.da),
+                        animating: false
+                    });
+                }, 1000)
+
+            })
+    }
+
+    renderRow = (rowData) => {
+
+        let imgSty;
+        if (this.state.itemType === 'listItem') {
+            imgSty = {height: 88, width: 88};
+        } else {
+            imgSty = {height: ( width - 12 ) / 2, width: ( width - 12 ) / 2};
+        }
+
         return (
             <TouchableOpacity
-                style={sty.listItem}
-                onPress={() => {
-                    this.props.navigator.push({
-                        title: '产品详情',
-                        component: ProductDetail,
-                        navigationBarHidden: false
-                    })
-                }}
+                style={sty[this.state.itemType]}
+                onPress={this.renderNewScene}
             >
                 <View style={{padding: 2}}>
                     <Image
-                        style={{height: 88, width: 88}}
+                        style={imgSty}
                         source={{uri: rowData.image}}
                     />
                 </View>
@@ -64,9 +82,48 @@ export default class ProductList extends Component {
                 </View>
             </TouchableOpacity>
         )
-    }
+    };
+
+    renderNewScene = () => {
+        this.props.navigator.push({
+            title: '产品详情',
+            component: ProductDetail,
+            navigationBarHidden: false
+        })
+    };
+
+    loadMore = () => {
+        fetch(config.productListUrl)
+            .then((res) => res.json())
+            .then((res) => {
+                this.da = this.da.concat(res.data);
+                this.setState({
+                    dataSource: this.ds.cloneWithRows(this.da)
+                })
+            })
+    };
 
     render () {
+
+        let dom;
+
+        if (this.da.length ) {
+            dom = <ListView
+                automaticallyAdjustContentInsets={false}
+                contentContainerStyle={sty[this.state.showType]}
+                dataSource={this.state.dataSource}
+                renderRow={this.renderRow}
+                onEndReached={this.loadMore}
+            />
+        } else {
+            dom = <ActivityIndicator
+                animating={this.state.animating}
+                style={[{alignSelf: 'center', flex: 1}, {transform: [{scale: 1.5}]}]}
+                size="large"
+            />
+        }
+
+
         return (
             <View style={styles.container}>
                 <View style={sty.header}>
@@ -80,15 +137,50 @@ export default class ProductList extends Component {
                             source={require('image!arrow_left')}
                         />
                     </TouchableOpacity>
+                    <View style={sty.headerSearch}>
+                        <TextInput
+                            style={{flex: 1}}
+                            defaultValue='插排'
+                        />
+                    </View>
+                    <TouchableOpacity
+                        style={sty.changeType}
+                        onPress={() => {
+                            if (this.state.showType === 'grid') {
+                                this.setState({
+                                    showType: 'list',
+                                    dataSource: this.ds.cloneWithRows(this.da),
+                                    itemType: 'listItem'
+                                })
+                            } else {
+                                this.setState({
+                                    showType: 'grid',
+                                    dataSource: this.ds.cloneWithRows(this.da),
+                                    itemType: 'gridItem'
+                                })
+                            }
+
+                        }}
+                    >
+                        <Image
+                            source={require('image!icon_grid')}
+                        />
+                    </TouchableOpacity>
                 </View>
                 <View style={sty.filter}>
-                    <Text>筛选</Text>
+                    <TouchableOpacity style={sty.filterItem}>
+                        <Text>综合</Text>
+                    </TouchableOpacity>
+                    <Text style={{color: '#e0e0e0'}}>|</Text>
+                    <TouchableOpacity style={sty.filterItem}>
+                        <Text>价格</Text>
+                    </TouchableOpacity>
+                    <Text style={{color: '#e0e0e0'}}>|</Text>
+                    <TouchableOpacity style={sty.filterItem}>
+                        <Text>筛选</Text>
+                    </TouchableOpacity>
                 </View>
-                <ListView
-                    style={{flex: 1}}
-                    dataSource={this.state.dataSource}
-                    renderRow={this.renderRow}
-                />
+                {dom}
             </View>
         )
     }
@@ -100,7 +192,12 @@ const sty = StyleSheet.create({
         backgroundColor: '#fff',
         marginBottom: 1,
         alignItems: 'center',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        justifyContent: 'center'
+    },
+    filterItem: {
+        flex: 1,
+        alignItems: 'center'
     },
     header: {
         height: 44,
@@ -110,16 +207,29 @@ const sty = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row'
     },
+    headerSearch: {
+        height: 28,
+        backgroundColor: '#fff',
+        position: 'absolute',
+        left: 44,
+        right: 41,
+        top: 8,
+        borderRadius: 5,
+        paddingLeft: 65
+    },
+    changeType: {
+        height: 44,
+        width: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        right: 0
+    },
     back: {
         width: 40,
         height: 44,
         alignItems: 'center',
         justifyContent: 'center'
-    },
-    listItem: {
-        flexDirection: 'row',
-        backgroundColor: '#fff',
-        marginBottom: 1
     },
     proInfo: {
         padding: 10,
@@ -139,5 +249,26 @@ const sty = StyleSheet.create({
     proCity: {
         position: 'absolute',
         right: 0
+    },
+    gridItem: {
+        width: width / 2 - 4,
+        height: width / 2 + 100,
+        backgroundColor: '#fff',
+        overflow: 'hidden',
+        borderWidth: 2,
+        borderColor: '#f3f3f3'
+    },
+    listItem: {
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        marginBottom: 1
+    },
+    list: {
+
+    },
+    grid: {
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+        padding: 2
     }
 });
