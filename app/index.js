@@ -72,19 +72,6 @@ class Index extends Component {
                         <Product navigator={this.props.navigator} />
                     </TabBarIOS.Item>
                     <TabBarIOS.Item
-                        title="精彩"
-                        icon={require('image!more')}
-                        selectedIcon={require('image!moreSelect')}
-                        selected={this.state.selectTab === 'more'}
-                        onPress={() => {
-                            this.setState({
-                                selectTab: 'more'
-                            })
-                        }}
-                    >
-                        {this.renderNavigatorIOS(More, '精彩', this.props.navigator)}
-                    </TabBarIOS.Item>
-                    <TabBarIOS.Item
                         title="聊天"
                         icon={require('image!message')}
                         selectedIcon={require('image!messageSelect')}

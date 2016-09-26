@@ -5,68 +5,51 @@ import {
     Text,
     ListView,
     TouchableOpacity,
-    SegmentedControlIOS
+    SegmentedControlIOS,
+    ScrollView,
+    Dimensions
 } from 'react-native';
 
 import {styles} from '../styleSheet';
 
-import ChatPage from './chatPage';
+import ChatList from './chatList';
 
-import data from '../data/data';
+import ChatFriend from './chatFriend';
 
-const msg = data.messageData;
+const {width} = Dimensions.get('window');
 
 export default class Chat extends Component {
 
     constructor (props) {
         super(props);
 
-        console.log('initial')
-        let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
         this.state = {
             segmentedValue: '',
             segmentedIndex: 0,
-            dataSource: ds.cloneWithRows(data.messageDefault)
+            width: 0,
+            height: 0,
+            selectedIndex: 0,
+            scrollingTo: null
         }
 
     }
 
     componentWillMount () {
-        console.log('component will mount');
+        console.log('component will mount: chat');
+    }
 
-        let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-
+    handleHorizontalScroll = (e) => {
+        let selectedIndex = e.nativeEvent.position;
+        if (selectedIndex === undefined) {
+            selectedIndex = Math.round(
+                e.nativeEvent.contentOffset.x / this.state.width,
+            );
+        }
         this.setState({
-            dataSource: ds.cloneWithRows(msg)
+            segmentedIndex: selectedIndex
         })
-    }
 
-    renderRow (rowData) {
-        return (
-            <TouchableOpacity
-                style={[styles.chatMessage, styles.line]}
-                onPress={() => {
-                    this.props.navigator.push({
-                        title: rowData.title,
-                        component: ChatPage,
-                        navigationBarHidden: false
-                    })
-                }}
-            >
-                <View style={styles.chatAvatar}>
-                    <Image
-                        style={{height: 36, width: 36, flex: 1, borderRadius: 18}}
-                        source={{uri: rowData.avatar}}
-                    />
-                </View>
-                <View>
-                    <Text style={styles.chatTitle}>{rowData.title}</Text>
-                    <Text style={styles.chatMsg}>{rowData.message}</Text>
-                </View>
-            </TouchableOpacity>
-        )
-    }
+    };
 
     render () {
         return (
@@ -74,7 +57,7 @@ export default class Chat extends Component {
                 <View style={[styles.line, styles.chatNav]}>
                     <SegmentedControlIOS
                         values={['消息', '好友']}
-                        selectedIndex={0}
+                        selectedIndex={this.state.segmentedIndex}
                         style={{width: 150}}
                         onValueChange={(value) => {
                             this.setState({
@@ -88,12 +71,36 @@ export default class Chat extends Component {
                         }}
                     />
                 </View>
-                <ListView
+                <ScrollView
+                    contentOffset={{
+                        x: this.state.width * this.state.segmentedIndex,
+                        y: 0
+                    }}
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    showsVerticalScrollIndicator={false}
                     automaticallyAdjustContentInsets={false}
-                    style={styles.chatList}
-                    dataSource={this.state.dataSource}
-                    renderRow={this.renderRow.bind(this)}
-                />
+                    directionalLockEnabled={true}
+                    pagingEnabled={true}
+                    bounces={false}
+                    scrollsToTop={false}
+                    scrollEventThrottle={100}
+                    removeClippedSubviews={true}
+                    onLayout={(e) => {
+                        this.setState({
+                            width: e.nativeEvent.layout.width,
+                            height: e.nativeEvent.layout.height
+                        })
+                    }}
+                    onScroll={this.handleHorizontalScroll}
+                >
+                    <View style={{flex: 1, width: width}}>
+                        <ChatList {...this.props} />
+                    </View>
+                    <View style={{flex: 1, width: width}}>
+                        <ChatFriend {...this.props} />
+                    </View>
+                </ScrollView>
             </View>
         )
     }
