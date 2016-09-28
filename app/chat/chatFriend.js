@@ -6,13 +6,15 @@ import {
     TextInput,
     TouchableOpacity,
     SegmentedControlIOS,
+    TouchableWithoutFeedback,
     ScrollView,
-    Dimensions,
     StyleSheet,
     LayoutAnimation
 } from 'react-native';
 
 import {styles} from '../styleSheet';
+
+import ChatPage from './chatPage';
 
 export default class ChatFriend extends Component {
     constructor (props) {
@@ -26,7 +28,7 @@ export default class ChatFriend extends Component {
 
         let list = [{group: '营销好友', items: ['陈琦', '玉芬']}, {group: '采购好友', items: ['陈琦', '玉芬']}]
             .map((item, index) => {
-                return <Row {...item} key={index} />
+                return <Row {...item} key={index} {...this.props}/>
             });
         return (
             <View style={{flex: 1}}>
@@ -38,6 +40,10 @@ export default class ChatFriend extends Component {
                 </View>
                 <ScrollView style={{paddingBottom: 120, flex: 1}}>
                     <View style={sty.newFriend}>
+                        <Image
+                            style={{marginRight: 10}}
+                            source={require('image!icon_frd')}
+                        />
                         <Text style={styles.ft17}>新朋友</Text>
                     </View>
                     {list}
@@ -61,26 +67,41 @@ class Row extends Component {
         let list, image;
         if (this.state.expanded) {
             list = this.props.items.map((item, i) =>
-                <View style={sty.frd} key={i}>
-                    <Text>{item}</Text>
-                </View>);
-            image = <Image style={{height: 12, width: 12}} source={require('image!expanded')} />
+                <TouchableOpacity
+                    onPress={() => {
+                        this.props.navigator.push({
+                            title: item,
+                            component: ChatPage,
+                            navigationBarHidden: false
+                        })
+                    }}
+                    style={sty.frd}
+                    key={i}
+                >
+                    <Image
+                        style={{height: 36, width: 36, borderRadius: 18, marginRight: 10}}
+                        source={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}
+                    />
+                    <Text style={{fontSize: 17}}>{item}</Text>
+                </TouchableOpacity>);
+            image = <Image style={{marginRight: 10}} source={require('image!expanded')} />
         } else {
-            image = <Image source={require('image!expand_normal')} />
+            image = <Image style={{marginRight: 10}} source={require('image!expand_normal')} />
         }
 
         return (
             <View>
-                <TouchableOpacity
-                    style={sty.group}
+                <TouchableWithoutFeedback
                     onPress={() => {
                         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
                         this.setState({expanded: !this.state.expanded});
                     }}
                 >
-                    {image}
-                    <Text style={styles.ft17}>{this.props.group}</Text>
-                </TouchableOpacity>
+                    <View style={sty.group}>
+                        {image}
+                        <Text style={styles.ft17}>{this.props.group}</Text>
+                    </View>
+                </TouchableWithoutFeedback>
                 {list}
             </View>
         )
@@ -106,9 +127,10 @@ const sty = StyleSheet.create({
     newFriend: {
         height: 60,
         backgroundColor: '#fff',
-        justifyContent: 'center',
+        alignItems: 'center',
         marginBottom: 16,
-        paddingLeft: 12
+        paddingLeft: 12,
+        flexDirection: 'row'
     },
     group: {
         height: 46,
@@ -120,9 +142,10 @@ const sty = StyleSheet.create({
     },
     frd: {
         height: 60,
-        justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: '#fff',
         marginBottom: 1,
-        paddingLeft: 24
+        paddingLeft: 24,
+        flexDirection: 'row'
     }
 });

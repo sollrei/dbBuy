@@ -76,7 +76,10 @@ export const styles = StyleSheet.create({
     },
     input: {
         height: 56,
-        paddingLeft: 10
+        paddingLeft: 10,
+        lineHeight: 55,
+        fontSize: 17,
+        color: '#999'
     },
     iconWrap: {
         flex: 1,

@@ -11,6 +11,7 @@ import {
 import {styles} from '../styleSheet';
 
 import Cate from './cate';
+import ProductSearch from './productSearch';
 
 export default class Product extends Component {
 
@@ -28,10 +29,17 @@ export default class Product extends Component {
                     </View>
                     <View style={styles.searchWrap}>
                         <View style={styles.search}>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="输入产品名"
-                            />
+                            <TouchableOpacity
+                                style={{borderRadius: 4}}
+                                onPress={() => {
+                                    this.props.navigator.push({
+                                        title: '搜索产品',
+                                        component: ProductSearch
+                                    })
+                                }}
+                            >
+                                <Text style={styles.input}>请输入产品名称啥的</Text>
+                            </TouchableOpacity>
                         </View>
                         <View style={styles.iconWrap}>
                             <TouchableOpacity style={styles.iconItem}>

@@ -45,10 +45,17 @@ export default class Company extends Component {
                     </View>
                     <View style={styles.searchWrap}>
                         <View style={styles.search}>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="请输入企业名、法人、注册号"
-                            />
+                            <TouchableOpacity
+                                onPress={() => {
+                                    this.props.navigator.push({
+                                        title: '企业搜索',
+                                        component: Search
+                                    })
+                                }}
+                            >
+                                <Text style={styles.input}>请输入企业名、法人、注册号</Text>
+                            </TouchableOpacity>
+
                         </View>
                         <View style={styles.iconWrap}>
                             <TouchableOpacity

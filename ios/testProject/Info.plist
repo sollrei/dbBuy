@@ -2,29 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-  <key>CFBundleURLTypes</key>
-  <array>
-    <dict>
-      <key>CFBundleURLName</key>
-      <string>RNShare</string>
-      <key>CFBundleURLSchemes</key>
-      <array>
-        <!--wechat-->
-        <string>wxd930ea5d5a258f4f</string>
-        <!--qq-->
-        <string>tencent1103194207</string>
-        <string>tencent1103194207.content</string>
-        <string>QQ41C1685F</string>
-        <!--weibo-->
-        <string>wb402180334</string>
-        <!--renren-->
-        <string>renrenshare228525</string>
-        <!--facebook-->
-        <string>fb776442542471056</string>
-
-      </array>
-    </dict>
-  </array>
 	<key>CFBundleAllowMixedLocalizations</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -43,8 +20,30 @@
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>RNShare</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>wxd930ea5d5a258f4f</string>
+				<string>tencent1103194207</string>
+				<string>tencent1103194207.content</string>
+				<string>QQ41C1685F</string>
+				<string>wb402180334</string>
+				<string>renrenshare228525</string>
+				<string>fb776442542471056</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>baidumap</string>
+		<string>iosamap</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -64,11 +63,6 @@
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
-	</array>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-	    <string>baidumap</string>
-	    <string>iosamap</string>
 	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>

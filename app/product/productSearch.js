@@ -1,23 +1,21 @@
 import React, {Component} from 'react';
 import {
     View,
-    ScrollView,
+    ListView,
+    ActivityIndicator,
     Image,
     Text,
     TextInput,
-    Dimensions,
+    TouchableOpacity,
     StyleSheet,
-    TouchableOpacity
+    Dimensions
 } from 'react-native';
+
+import ProductList from './productList';
 
 import {styles} from '../styleSheet';
 
-
-export default class Search extends Component {
-
-    constructor (props) {
-        super(props);
-    }
+export default class ProductSearch extends Component {
 
     render () {
         return (
@@ -42,7 +40,8 @@ export default class Search extends Component {
                         style={sty.searchBtn}
                         onPress={() => {
                             this.props.navigator.push({
-                                title: '搜索结果'
+                                title: '搜索结果',
+                                component: ProductList
                             })
                         }}
                     >
@@ -53,8 +52,8 @@ export default class Search extends Component {
         )
     }
 
-}
 
+}
 
 
 const sty = StyleSheet.create({
