@@ -13,9 +13,9 @@ import {
 
 import {styles} from '../styleSheet';
 
-import Hot from './hot';
+import Hot from './unitHot';
 import LoginPage from '../page/login';
-import Search from './search';
+import Search from './companySearch';
 import AreaSearch from './areaSearch';
 import CameraSearch from './cameraSearch';
 import MapSearch from './mapSearch';

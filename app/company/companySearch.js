@@ -12,6 +12,7 @@ import {
 
 import {styles} from '../styleSheet';
 
+import SearchResult from './companySearchResult';
 
 export default class Search extends Component {
 
@@ -42,7 +43,8 @@ export default class Search extends Component {
                         style={sty.searchBtn}
                         onPress={() => {
                             this.props.navigator.push({
-                                title: '搜索结果'
+                                title: '搜索结果',
+                                component: SearchResult
                             })
                         }}
                     >

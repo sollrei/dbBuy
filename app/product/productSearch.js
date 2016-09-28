@@ -34,6 +34,7 @@ export default class ProductSearch extends Component {
                     <View style={sty.headerSearch}>
                         <TextInput
                             style={{flex: 1}}
+                            
                         />
                     </View>
                     <TouchableOpacity

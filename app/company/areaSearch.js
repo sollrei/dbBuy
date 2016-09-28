@@ -4,15 +4,13 @@ import {
     ScrollView,
     Image,
     Text,
-    TextInput,
-    Dimensions,
     TouchableOpacity,
     StyleSheet
 } from 'react-native';
 
 import {styles} from '../styleSheet';
-import SearchPage from './searchPage';
-import SearchResult from './searchResult';
+import SearchPage from './filterPage';
+import SearchResult from './areaSearchResult';
 
 export default class AreaSearch extends Component {
 
