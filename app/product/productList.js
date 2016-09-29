@@ -34,22 +34,36 @@ export default class ProductList extends Component {
             animating: true
         }
 
+
     }
 
     componentWillMount () {
-        fetch(config.productListUrl)
+
+        const productKey = this.props.productKey;
+
+        const url = config.productSearchUrl;
+
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify({
+                name: productKey
+            })
+        })
             .then((res) => res.json())
             .then((res) => {
+                this.da = res;
 
-                setTimeout(() => {
-                    this.da = res.data;
-                    this.setState({
-                        dataSource: this.ds.cloneWithRows(this.da),
-                        animating: false
-                    });
-                }, 1000)
 
-            })
+                this.setState({
+                    dataSource: this.ds.cloneWithRows(res),
+                    animating: false
+                });
+
+
+
+            });
+
+
     }
 
     renderRow = (rowData) => {
@@ -69,11 +83,11 @@ export default class ProductList extends Component {
                 <View style={{padding: 2}}>
                     <Image
                         style={imgSty}
-                        source={{uri: rowData.image}}
+                        source={{uri: rowData.picture}}
                     />
                 </View>
                 <View style={sty.proInfo}>
-                    <Text style={sty.proTitle}>{rowData.title}</Text>
+                    <Text style={sty.proTitle}>{rowData.name}</Text>
                     <View style={sty.proAdd}>
                         <Text style={[styles.primaryColor, styles.ft16]}>{rowData.price}</Text>
                         <Text style={[styles.grayColor, sty.proCity]}>{rowData.city}</Text>
@@ -92,14 +106,14 @@ export default class ProductList extends Component {
     };
 
     loadMore = () => {
-        fetch(config.productListUrl)
-            .then((res) => res.json())
-            .then((res) => {
-                this.da = this.da.concat(res.data);
-                this.setState({
-                    dataSource: this.ds.cloneWithRows(this.da)
-                })
-            })
+        // fetch(config.productListUrl)
+        //     .then((res) => res.json())
+        //     .then((res) => {
+        //         this.da = this.da.concat(res.data);
+        //         this.setState({
+        //             dataSource: this.ds.cloneWithRows(this.da)
+        //         })
+        //     })
     };
 
     render () {

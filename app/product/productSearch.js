@@ -7,8 +7,7 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    StyleSheet,
-    Dimensions
+    StyleSheet
 } from 'react-native';
 
 import ProductList from './productList';
@@ -16,6 +15,23 @@ import ProductList from './productList';
 import {styles} from '../styleSheet';
 
 export default class ProductSearch extends Component {
+
+    searchProduct (text) {
+
+        if (text) {
+            this.props.navigator.push({
+                title: '搜索结果',
+                component: ProductList,
+                passProps: {
+                    productKey: text
+                }
+            });
+        } else {
+
+        }
+
+
+    }
 
     render () {
         return (
@@ -34,7 +50,11 @@ export default class ProductSearch extends Component {
                     <View style={sty.headerSearch}>
                         <TextInput
                             style={{flex: 1}}
-                            
+                            returnKeyType="search"
+                            onSubmitEditing={(event) => {
+                                console.log(event.nativeEvent.text);
+                                this.searchProduct(event.nativeEvent.text);
+                            }}
                         />
                     </View>
                     <TouchableOpacity

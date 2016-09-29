@@ -1,32 +1,12 @@
-
 // ----------------- mongodb ---------------- //
 
-const MongoClient = require('mongodb').MongoClient;
-const urlDb = 'mongodb://localhost:27017/myDatabase';
-
-
-function insertData (db, collectionName, data, callback) {
-    console.log('insert document');
-
-    const collection = db.collection(collectionName);
-    // Insert some documents
-
-    collection.insertOne(data, function(err, result) {
-        if(err){
-            console.log(err)
-        } else {
-            console.log("插入成功");
-            callback(result);
-        }
-
-    });
-}
+const MongoClient = require('mongodb').MongoClient,
+    urlDb = 'mongodb://localhost:27017/myDatabase';
 
 function findData (db, collectionName, findOpt, callback) {
-    console.log('find database');
+    console.log('find collection:' + collectionName);
 
     const collection = db.collection(collectionName);
-    // Insert some documents
 
     collection.find(findOpt).toArray(function(err,docs){
         if(err) throw  err;
@@ -37,25 +17,28 @@ function findData (db, collectionName, findOpt, callback) {
     });
 }
 
-
-
 // ----------------- http server ---------------- //
 
-const url = require('url');
-const http = require('http');
-const port = 1337;
+const url = require('url'),
+    http = require('http'),
+    port = 1337;
 
-function findProduct (filter, response) {
+function search (filter, type, response) {
+
+    var newFilter = filter;
+
+    if (filter.name) {
+        newFilter.name = new RegExp(filter.name);
+    }
 
     MongoClient.connect(urlDb, function(err, db) {
+
         console.log("Connected successfully to server");
 
-        findData(db, 'product', filter, (docs) => {
+        findData(db, type, newFilter, (docs) => {
 
-            console.log(JSON.stringify(docs))
             response.write(JSON.stringify(docs));
             response.end();
-            db.close();
 
         });
 
@@ -65,26 +48,37 @@ function findProduct (filter, response) {
 
 const requestHandler = (request, response) => {
 
-    console.log(request.url);
+    var postData = "",
+        parsedUrl = url.parse(request.url, true);
 
-    const parsedUrl = url.parse(request.url, true);
+    if (request.method.toUpperCase() === 'GET') {
 
-    if (parsedUrl.pathname && parsedUrl.pathname === '/product/') {
-
-        if (parsedUrl.search) {
-
-            const queryObj = parsedUrl.query;
-            console.log(queryObj);
-            findProduct(queryObj, response);
-
-        } else {
-            findProduct({}, response);
-        }
+        response.write('hello');
+        response.end();
 
     } else {
-        response.end('Hello Node.js Server!');
-    }
 
+        request.addListener("data", function (data) {
+            postData += data;
+        });
+
+        request.addListener("end", function () {
+            var query = JSON.parse(postData),
+                pathName = parsedUrl.pathname;
+
+            if (pathName) {
+                if (pathName === '/product/') {
+
+                    search(query, 'product', response);
+
+                } else if (pathName === '/company/') {
+
+                    search(query, 'company', response);
+
+                }
+            }
+        });
+    }
 };
 
 const server = http.createServer(requestHandler);
@@ -95,15 +89,5 @@ server.listen(port, (err) => {
     }
     console.log(`server is listening on ${port}`)
 });
-
-
-
-
-
-// console.log('Server running at http://127.0.0.1:1337/');
-
-
-
-
 
 
