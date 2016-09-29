@@ -25,44 +25,47 @@ export default class ProductList extends Component {
         let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
         this.ds = ds;
-        this.da = [];
 
         this.state = {
-            dataSource: ds.cloneWithRows(this.da),
+            dataSource: ds.cloneWithRows([]),
             showType: 'grid',
             itemType: 'gridItem',
-            animating: true
+            animating: true,
+            loaded: false,
+            data: []
         }
+    }
 
+    searchProduct (filterObject = {}) {
 
+        const url = config.productSearchUrl;
+
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(
+                filterObject
+            )
+        })
+            .then((res) => res.json())
+            .then((res) => {
+
+                this.setState({
+                    dataSource: this.ds.cloneWithRows(res),
+                    animating: false,
+                    loaded: true,
+                    data: res
+                });
+
+            });
     }
 
     componentWillMount () {
 
         const productKey = this.props.productKey;
 
-        const url = config.productSearchUrl;
-
-        fetch(url, {
-            method: 'POST',
-            body: JSON.stringify({
-                name: productKey
-            })
-        })
-            .then((res) => res.json())
-            .then((res) => {
-                this.da = res;
-
-
-                this.setState({
-                    dataSource: this.ds.cloneWithRows(res),
-                    animating: false
-                });
-
-
-
-            });
-
+        this.searchProduct({
+            name: productKey
+        });
 
     }
 
@@ -120,14 +123,18 @@ export default class ProductList extends Component {
 
         let dom;
 
-        if (this.da.length ) {
-            dom = <ListView
-                automaticallyAdjustContentInsets={false}
-                contentContainerStyle={sty[this.state.showType]}
-                dataSource={this.state.dataSource}
-                renderRow={this.renderRow}
-                onEndReached={this.loadMore}
-            />
+        if (this.state.loaded) {
+            if (this.state.data.length ) {
+                dom = <ListView
+                    automaticallyAdjustContentInsets={false}
+                    contentContainerStyle={sty[this.state.showType]}
+                    dataSource={this.state.dataSource}
+                    renderRow={this.renderRow}
+                    onEndReached={this.loadMore}
+                />
+            } else {
+               dom = <View style={{alignItems: 'center', justifyContent: 'center', height: 100}}><Text>没有数据咯~搜下"插座"试试</Text></View>
+            }
         } else {
             dom = <ActivityIndicator
                 animating={this.state.animating}
@@ -135,7 +142,6 @@ export default class ProductList extends Component {
                 size="large"
             />
         }
-
 
         return (
             <View style={styles.container}>
@@ -153,7 +159,13 @@ export default class ProductList extends Component {
                     <View style={sty.headerSearch}>
                         <TextInput
                             style={{flex: 1}}
-                            defaultValue='插排'
+                            defaultValue={this.props.productKey}
+                            returnKeyType="search"
+                            onSubmitEditing={(event) => {
+                                this.searchProduct({
+                                    name: event.nativeEvent.text
+                                });
+                            }}
                         />
                     </View>
                     <TouchableOpacity
@@ -162,13 +174,13 @@ export default class ProductList extends Component {
                             if (this.state.showType === 'grid') {
                                 this.setState({
                                     showType: 'list',
-                                    dataSource: this.ds.cloneWithRows(this.da),
+                                    dataSource: this.ds.cloneWithRows(this.state.data),
                                     itemType: 'listItem'
                                 })
                             } else {
                                 this.setState({
                                     showType: 'grid',
-                                    dataSource: this.ds.cloneWithRows(this.da),
+                                    dataSource: this.ds.cloneWithRows(this.state.data),
                                     itemType: 'gridItem'
                                 })
                             }
@@ -228,7 +240,7 @@ const sty = StyleSheet.create({
         right: 41,
         top: 8,
         borderRadius: 5,
-        paddingLeft: 65
+        paddingLeft: 15
     },
     changeType: {
         height: 44,

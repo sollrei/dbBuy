@@ -16,6 +16,13 @@ import {styles} from '../styleSheet';
 
 export default class ProductSearch extends Component {
 
+    constructor (props) {
+        super(props);
+        this.state = {
+            key: ''
+        }
+    }
+
     searchProduct (text) {
 
         if (text) {
@@ -29,8 +36,6 @@ export default class ProductSearch extends Component {
         } else {
 
         }
-
-
     }
 
     render () {
@@ -52,18 +57,20 @@ export default class ProductSearch extends Component {
                             style={{flex: 1}}
                             returnKeyType="search"
                             onSubmitEditing={(event) => {
-                                console.log(event.nativeEvent.text);
                                 this.searchProduct(event.nativeEvent.text);
+                            }}
+                            ref="searchInput"
+                            onChangeText={(text) => {
+                                this.setState({
+                                    key: text
+                                })
                             }}
                         />
                     </View>
                     <TouchableOpacity
                         style={sty.searchBtn}
                         onPress={() => {
-                            this.props.navigator.push({
-                                title: '搜索结果',
-                                component: ProductList
-                            })
+                            this.searchProduct(this.state.key);
                         }}
                     >
                         <Text style={[styles.primaryColor, styles.ft16]}>查询</Text>
