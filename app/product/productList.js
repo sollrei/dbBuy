@@ -133,7 +133,9 @@ export default class ProductList extends Component {
                     onEndReached={this.loadMore}
                 />
             } else {
-               dom = <View style={{alignItems: 'center', justifyContent: 'center', height: 100}}><Text>没有数据咯~搜下"插座"试试</Text></View>
+               dom = <View style={{alignItems: 'center', justifyContent: 'center', height: 100}}>
+                   <Text>没有数据咯~搜下"插座"试试</Text>
+               </View>
             }
         } else {
             dom = <ActivityIndicator

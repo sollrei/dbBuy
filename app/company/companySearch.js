@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
 import {
     View,
-    ScrollView,
     Image,
     Text,
     TextInput,
-    Dimensions,
     StyleSheet,
     TouchableOpacity
 } from 'react-native';
@@ -18,6 +16,24 @@ export default class Search extends Component {
 
     constructor (props) {
         super(props);
+
+        this.state = {
+            key: ''
+        }
+    }
+
+    searchCompany (text) {
+        if (text) {
+            this.props.navigator.push({
+                title: '搜索结果',
+                component: SearchResult,
+                passProps: {
+                    companyKey: text
+                }
+            });
+        } else {
+            console.log('no search key');
+        }
     }
 
     render () {
@@ -37,15 +53,21 @@ export default class Search extends Component {
                     <View style={sty.headerSearch}>
                         <TextInput
                             style={{flex: 1}}
+                            returnKeyType="search"
+                            onSubmitEditing={(event) => {
+                                this.searchCompany(event.nativeEvent.text)
+                            }}
+                            onChangeText={(text) => {
+                                this.setState({
+                                    key: text
+                                })
+                            }}
                         />
                     </View>
                     <TouchableOpacity
                         style={sty.searchBtn}
                         onPress={() => {
-                            this.props.navigator.push({
-                                title: '搜索结果',
-                                component: SearchResult
-                            })
+                            this.searchCompany(this.state.key)
                         }}
                     >
                         <Text style={[styles.primaryColor, styles.ft16]}>查询</Text>
