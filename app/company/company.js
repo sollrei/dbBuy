@@ -4,22 +4,20 @@ import {
     ScrollView,
     Image,
     Text,
-    TextInput,
     TouchableOpacity,
-    AlertIOS,
-    StyleSheet,
-    Dimensions
+    AlertIOS
 } from 'react-native';
 
 import {styles} from '../styleSheet';
 
-import Hot from './unitHot';
+
 import LoginPage from '../page/login';
 import Search from './companySearch';
 import AreaSearch from './areaSearch';
 import CameraSearch from './cameraSearch';
 import MapSearch from './mapSearch';
-
+import HotPage from '../page/hot';
+import Hot from './unitHot';
 
 export default class Company extends Component {
 
@@ -27,10 +25,59 @@ export default class Company extends Component {
         super(props);
         this.state = {
             img: ''
-        }
+        };
+    }
+
+    componentWillMount () {
+        console.log('companyIndex: componentWillMount');
+    }
+
+    componentDidMount () {
+
+    }
+
+    componentDidMount () {
+        // console.log('companyIndex: componentDidMount');
+    }
+
+    shouldComponentUpdate (nextProps, nextState) {
+        console.log('companyIndex: shouldComponentUpdate');
+        return false;
+    }
+
+    componentWillUpdate (nextProps, nextState) {
+        console.log('companyIndex: componentWillUpdate');
+    }
+
+    componentDidUpdate (prevProps, prevSate) {
+        console.log('companyIndex: componentDidUpdate');
+
+    }
+
+    renderItem (data, index) {
+        return (
+            <TouchableOpacity
+                key={index}
+                style={styles.hotLi}
+                onPress={() => {
+                    this.props.navigator.push({
+                        title: data.title,
+                        component: HotPage,
+                        navigationBarHidden: false,
+                        passProps: {
+                            key: data.id
+                        }
+                    });
+                }}
+            >
+                <Text style={styles.hotText}>{data.title}</Text>
+            </TouchableOpacity>
+        )
     }
 
     render () {
+
+        console.log('companyIndex: render');
 
         return (
             <View style={styles.container}>
@@ -126,7 +173,7 @@ export default class Company extends Component {
                         </View>
                     </View>
 
-                    <Hot navigator={this.props.navigator} />
+                    <Hot {...this.props} />
                 </ScrollView>
             </View>
         )

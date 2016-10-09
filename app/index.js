@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import {
     View,
-    Text,
-    TabBarIOS,
-    NavigatorIOS
+    TabBarIOS
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -21,22 +19,6 @@ class Index extends Component {
         this.state = {
             selectTab: 'index'
         }
-    }
-
-    renderNavigatorIOS (component, title, navigator) {
-        return (
-            <NavigatorIOS
-                style={{flex: 1}}
-                initialRoute={{
-                    component: component,
-                    title: title,
-                    passProps: {
-                        title: 'hi',
-                        navigator: navigator
-                    }
-                }}
-            />
-        )
     }
 
     render () {

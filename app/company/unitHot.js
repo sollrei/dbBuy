@@ -1,32 +1,60 @@
 import React, {Component} from 'react';
 import {
     View,
-    ScrollView,
-    Image,
     Text,
-    TextInput,
-    Dimensions,
     TouchableOpacity
 } from 'react-native';
 
 import {styles} from '../styleSheet';
 import HotPage from '../page/hot';
-
-const hotData = [{
-    "title": "百度借贷20亿美元，已同21家银行签协议",
-    "id": "1"
-},{
-    "title": "三星Note7国行版也炸了：网友爆料突然黑屏发生爆炸",
-    "id": "2"
-},{
-    "title": "凯文凯利：如何一分钟预测未来",
-    "id": "3"
-}];
+import config from '../data/config';
 
 export default class Hot extends Component {
 
     constructor (props) {
         super(props);
+
+        this.state = {
+            hotData: [],
+            isLoading: true
+        };
+
+        // storage.load({
+        //     key: 'hot',
+        //     autoSync: true,
+        //     syncInBackground: true
+        // }).then(ret => {
+        //     console.log('get cache & change state');
+        //
+        //     if (ret.length) {
+        //         this.setState({
+        //             hotData: ret
+        //         });
+        //
+        //     }
+        //
+        // }).catch(err => {
+        //     console.log(err.name);
+        // });
+    }
+
+    componentWillMount () {
+
+
+
+        fetch(config.hotSearchUrl, {
+            method: 'POST',
+            body: JSON.stringify({})
+        })
+            .then((res) => res.json())
+            .then((res) => {
+                    console.log('get http & change state');
+                    this.setState({
+                        hotData: res,
+                        isLoading: false
+                    });
+            });
+
     }
 
     renderItem (data, index) {
@@ -52,7 +80,18 @@ export default class Hot extends Component {
 
     render () {
 
-        let rowDom = hotData.map((item, index) => {
+        console.log('unitHot: render');
+
+        if (this.state.isLoading) {
+            return <View style={styles.hotWrap}>
+                <View style={styles.hotTitle}>
+                    <Text style={{fontSize: 19, lineHeight: 44}}>热点</Text>
+                </View>
+                <Text>loading ...</Text>
+            </View>
+        }
+
+        let rowDom = this.state.hotData.map((item, index) => {
             return this.renderItem(item, index)
         });
 

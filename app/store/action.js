@@ -5,11 +5,6 @@ export const USER_REGISTERED = 'USER_REGISTERED';
 export const USER_LOGOUT = 'USER_LOGIN';
 
 
-let testUser = {
-    'name': 'test user',
-    'avatar': ''
-};
-
 let defaultUser = {
     'name': 'guest',
     'avatar': ''

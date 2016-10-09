@@ -1,7 +1,7 @@
 // ----------------- mongodb ---------------- //
 
 const MongoClient = require('mongodb').MongoClient,
-    urlDb = 'mongodb://localhost:27017/myDatabase';
+    urlDb = 'mongodb://192.168.12.47:27017/myDatabase';
 
 function findData (db, collectionName, findOpt, callback) {
     console.log('find collection:' + collectionName);
@@ -74,6 +74,10 @@ const requestHandler = (request, response) => {
                 } else if (pathName === '/company/') {
 
                     search(query, 'company', response);
+
+                } else if (pathName === '/hot/') {
+
+                    search(query, 'hot', response);
 
                 }
             }

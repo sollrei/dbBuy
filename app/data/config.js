@@ -1,17 +1,16 @@
 
-const baseUrl = 'http://localhost:1337';
+const baseUrl = 'http://192.168.12.47:1337';
 
 export default config = {
 
-
-
     userUrl: 'http://192.168.12.47/user.json',
     hotContentUrl: 'http://192.168.12.47/content.json',
-    productListUrl: 'http://192.168.12.47/rndata/productlist.json',
 
     productSearchUrl: baseUrl + '/product/',
 
     companySearchUrl: baseUrl + '/company/',
+
+    hotSearchUrl: baseUrl + '/hot/',
 
     searchCompany: {
         year: [{

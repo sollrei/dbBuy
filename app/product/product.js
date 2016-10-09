@@ -4,7 +4,6 @@ import {
     ScrollView,
     Image,
     Text,
-    TextInput,
     TouchableOpacity
 } from 'react-native';
 
@@ -14,6 +13,11 @@ import Cate from './cate';
 import ProductSearch from './productSearch';
 
 export default class Product extends Component {
+
+    shouldComponentUpdate () {
+        // 先用静态页测试= =
+        return false;
+    }
 
     render () {
         return (

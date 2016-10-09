@@ -16,7 +16,7 @@ import Footprint from './footprint';
 import FavCompany from './favCompany';
 import FavProduct from './favProduct';
 import FavPlace from './favPlace';
-
+import * as actions from '../store/action';
 export default class My extends Component {
 
     dealLoginScene (title, scene) {
@@ -105,10 +105,13 @@ export default class My extends Component {
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={[styles.myNavItem, styles.mr1]}
-                            onPress={this.dealLoginScene.bind(this, '广场收藏', FavPlace)}
+                            // onPress={this.dealLoginScene.bind(this, '广场收藏', FavPlace)}
+                            onPress={() => {
+                                this.props.dispatch(actions.setLogout());
+                            }}
                         >
                             <Text style={[styles.mCount, styles.mCText]}>0</Text>
-                            <Text style={styles.mCTitle}>广场收藏</Text>
+                            <Text style={styles.mCTitle}>测试退出</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={styles.myNavItem}

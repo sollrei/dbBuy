@@ -5,7 +5,7 @@ import {
 
 import { GiftedChat } from 'react-native-gifted-chat';
 
-const DEFAULT_WS_URL = 'ws://localhost:5555/';
+const DEFAULT_WS_URL = 'ws://192.168.12.47:5555/';
 
 export default class ChatPage extends Component {
 
