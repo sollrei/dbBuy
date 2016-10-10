@@ -32,13 +32,27 @@ export default class ProductList extends Component {
             itemType: 'gridItem',
             animating: true,
             loaded: false,
-            data: []
-        }
+            data: [],
+            productKey: '',
+            skip: 0
+        };
+
+        this.skip = 0;
+        this.productKey = '';
+        this.loading = false;
+        this.hasMore = true;
     }
 
-    searchProduct (filterObject = {}) {
+    searchProduct (filterObject = {
+        filter: {},
+        skip: 0
+    }) {
+
+        console.log('do search product');
 
         const url = config.productSearchUrl;
+
+        this.loading = true;
 
         fetch(url, {
             method: 'POST',
@@ -49,13 +63,20 @@ export default class ProductList extends Component {
             .then((res) => res.json())
             .then((res) => {
 
+                this.skip = filterObject.skip || 0;
+                this.productKey = filterObject.filter.proname || '';
+                this.loading = false;
+
+                let data = res;
+
+                if (filterObject.skip !== 0) { data = this.state.data.concat(res);}
+
                 this.setState({
-                    dataSource: this.ds.cloneWithRows(res),
+                    dataSource: this.ds.cloneWithRows(data),
                     animating: false,
                     loaded: true,
-                    data: res
+                    data: data
                 });
-
             });
     }
 
@@ -64,19 +85,31 @@ export default class ProductList extends Component {
         const productKey = this.props.productKey;
 
         this.searchProduct({
-            name: productKey
+            filter: {
+                proname: productKey
+            },
+            skip: 0
         });
 
     }
 
     renderRow = (rowData) => {
 
-        let imgSty;
+        let imgSty, picArr, pic;
+
         if (this.state.itemType === 'listItem') {
-            imgSty = {height: 88, width: 88};
+            imgSty = {height: 88, width: 88, backgroundColor: '#fff'};
         } else {
-            imgSty = {height: ( width - 12 ) / 2, width: ( width - 12 ) / 2};
+            imgSty = {height: ( width - 12 ) / 2, width: ( width - 12 ) / 2, backgroundColor: '#fff'};
         }
+
+        try {
+            picArr = JSON.parse(rowData.picurl);
+            pic = 'https:' + picArr[0];
+        } catch (error) {
+            pic = 'https://img10.cn.gcimg.net/v1/pro/1/T1.jpg-350x350.jpg';
+        }
+
 
         return (
             <TouchableOpacity
@@ -86,14 +119,14 @@ export default class ProductList extends Component {
                 <View style={{padding: 2}}>
                     <Image
                         style={imgSty}
-                        source={{uri: rowData.picture}}
+                        source={{uri: pic}}
                     />
                 </View>
                 <View style={sty.proInfo}>
-                    <Text style={sty.proTitle}>{rowData.name}</Text>
+                    <Text style={sty.proTitle}>{rowData.proname}</Text>
                     <View style={sty.proAdd}>
-                        <Text style={[styles.primaryColor, styles.ft16]}>{rowData.price}</Text>
-                        <Text style={[styles.grayColor, sty.proCity]}>{rowData.city}</Text>
+                        <Text style={[styles.primaryColor, styles.ft16]}>价格面议</Text>
+                        <Text style={[styles.grayColor, sty.proCity]}>地区</Text>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -109,14 +142,17 @@ export default class ProductList extends Component {
     };
 
     loadMore = () => {
-        // fetch(config.productListUrl)
-        //     .then((res) => res.json())
-        //     .then((res) => {
-        //         this.da = this.da.concat(res.data);
-        //         this.setState({
-        //             dataSource: this.ds.cloneWithRows(this.da)
-        //         })
-        //     })
+
+        if (!this.loading && this.hasMore) {
+            this.skip = this.skip + 1;
+            this.searchProduct({
+                filter: {
+                    proname: this.productKey
+                },
+                skip: this.skip * 10
+            })
+        }
+
     };
 
     render () {
@@ -134,7 +170,7 @@ export default class ProductList extends Component {
                 />
             } else {
                dom = <View style={{alignItems: 'center', justifyContent: 'center', height: 100}}>
-                   <Text>没有数据咯~搜下"插座"试试</Text>
+                   <Text>没有数据咯~</Text>
                </View>
             }
         } else {
@@ -165,7 +201,10 @@ export default class ProductList extends Component {
                             returnKeyType="search"
                             onSubmitEditing={(event) => {
                                 this.searchProduct({
-                                    name: event.nativeEvent.text
+                                    filter: {
+                                        proname: event.nativeEvent.text
+                                    },
+                                    skip: 0
                                 });
                             }}
                         />

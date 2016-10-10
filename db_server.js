@@ -8,7 +8,43 @@ function findData (db, collectionName, findOpt, callback) {
 
     const collection = db.collection(collectionName);
 
-    collection.find(findOpt).toArray(function(err,docs){
+    collection.find(findOpt).limit(10).toArray(function(err,docs){
+        if(err) throw  err;
+        else{
+            callback && callback(docs);
+            db.close();
+        }
+    });
+}
+
+function findProductList (db, filter, callback, skip) {
+    console.log('find collection:pd_info');
+
+    const collection = db.collection('pd_info');
+
+    collection.aggregate([
+        {
+            $match: filter
+        },{
+            $skip: skip
+        },{
+            $lookup: {
+                from: 'gc_company',
+                localField: 'cid',
+                foreignField: 'cid',
+                as: 'cominfo'
+            }
+        },{
+            $limit: 10
+        },{
+            $project: {
+                proname: 1,
+                cid: 1,
+                picurl: 1,
+                'cominfo.comname': 1
+            }
+        }
+    ]).toArray(function(err,docs){
         if(err) throw  err;
         else{
             callback && callback(docs);
@@ -23,27 +59,42 @@ const url = require('url'),
     http = require('http'),
     port = 1337;
 
-function search (filter, type, response) {
+function search (filter, type, response, skip) {
 
     var newFilter = filter;
+
+    if (filter.proname) {
+        newFilter.proname = new RegExp(filter.proname);
+    }
 
     if (filter.name) {
         newFilter.name = new RegExp(filter.name);
     }
 
+
     MongoClient.connect(urlDb, function(err, db) {
 
         console.log("Connected successfully to server");
 
-        findData(db, type, newFilter, (docs) => {
+        if (type === 'product') {
 
-            response.write(JSON.stringify(docs));
-            response.end();
+            findProductList(db, newFilter, (docs) => {
+                response.write(JSON.stringify(docs));
+                response.end();
+            }, skip);
 
-        });
+        } else {
+            findData(db, type, newFilter, (docs) => {
+
+                response.write(JSON.stringify(docs));
+                response.end();
+
+            });
+        }
+
+
 
     });
-
 }
 
 const requestHandler = (request, response) => {
@@ -69,7 +120,9 @@ const requestHandler = (request, response) => {
             if (pathName) {
                 if (pathName === '/product/') {
 
-                    search(query, 'product', response);
+
+
+                    search(query.filter, 'product', response, query.skip);
 
                 } else if (pathName === '/company/') {
 

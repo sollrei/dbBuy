@@ -69,6 +69,38 @@ export default config = {
         },{
             id: 2,
             label: '无效'
+        }],
+        industry: [{
+            id: 0,
+            label: '不限'
+        },{
+            id: 1,
+            label: '测试行业1'
+        },{
+            id: 2,
+            label: '测试行业2'
+        },{
+            id: 3,
+            label: '测试行业3'
+        }],
+        city: [{
+            id: 0,
+            label: '不限'
+        }, {
+            id: 1,
+            label: '河南'
+        }, {
+            id: 2,
+            label: '地区'
+        }, {
+            id: 3,
+            label: '应该'
+        }, {
+            id: 4,
+            label: '是二级'
+        }, {
+            id: 5,
+            label: '联动的'
         }]
     }
 }

@@ -4,8 +4,6 @@ import {
     ScrollView,
     Image,
     Text,
-    TextInput,
-    Dimensions,
     TouchableOpacity,
     StyleSheet
 } from 'react-native';
@@ -16,7 +14,9 @@ import config from '../data/config';
 const pageData = {
     year: config.searchCompany.year,
     money: config.searchCompany.money,
-    status: config.searchCompany.status
+    status: config.searchCompany.status,
+    industry: config.searchCompany.industry,
+    area: config.searchCompany.city
 };
 
 export default class SearchPage extends Component {
@@ -37,6 +37,7 @@ export default class SearchPage extends Component {
             const id = item.id,
                 label = item.label;
 
+            let styleName = (id === 0) ? 'sDefault' : 'sSelect';
 
             if (id === selected) {
                 return (
@@ -44,7 +45,8 @@ export default class SearchPage extends Component {
                         style={sty.row}
                         key={id}
                         onPress={() => {
-                            fn(id, label, 'sDefault');
+
+                            fn(id, label, styleName);
                             this.props.navigator.pop();
                         }}
                     >
@@ -61,7 +63,8 @@ export default class SearchPage extends Component {
                         style={sty.row}
                         key={id}
                         onPress={() => {
-                            fn(id, label, 'sSelect');
+
+                            fn(id, label, styleName);
                             this.props.navigator.pop();
                         }}
                     >

@@ -16,6 +16,7 @@ export default class Product extends Component {
 
     shouldComponentUpdate () {
         // 先用静态页测试= =
+
         return false;
     }
 

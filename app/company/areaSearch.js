@@ -72,7 +72,10 @@ export default class AreaSearch extends Component {
         return (
             <View style={[styles.container]}>
                 <ScrollView style={{paddingTop: 12}}>
-                    <TouchableOpacity style={sty.sRow}>
+                    <TouchableOpacity
+                        style={sty.sRow}
+                        onPress={this.renderNewScene.bind(this, '行业选择', SearchPage, 'industry')}
+                    >
                         <Text style={sty.sRowText}>行业</Text>
                         <View style={sty.sRowRight}>
                             <Text
@@ -83,7 +86,10 @@ export default class AreaSearch extends Component {
                             />
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={sty.sRow}>
+                    <TouchableOpacity
+                        style={sty.sRow}
+                        onPress={this.renderNewScene.bind(this, '地区选择', SearchPage, 'area')}
+                    >
                         <Text style={sty.sRowText}>地区</Text>
                         <View style={sty.sRowRight}>
                             <Text
