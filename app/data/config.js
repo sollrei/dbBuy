@@ -8,6 +8,8 @@ export default config = {
 
     productSearchUrl: baseUrl + '/product/',
 
+    productDetailUrl: baseUrl + '/pddetail/',
+
     companySearchUrl: baseUrl + '/company/',
 
     hotSearchUrl: baseUrl + '/hot/',

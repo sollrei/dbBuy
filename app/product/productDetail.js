@@ -4,13 +4,14 @@ import {
     ScrollView,
     Image,
     Text,
-    TextInput,
     TouchableOpacity,
     Dimensions,
     StyleSheet
 } from 'react-native';
 
 import Swiper from 'react-native-swiper';
+
+import config from '../data/config';
 
 import {styles} from '../styleSheet';
 
@@ -20,9 +21,41 @@ export default class ProductDetail extends Component {
 
     constructor (props) {
         super(props);
+
+        this.state = {
+            productData: ''
+        }
+    }
+
+    componentWillMount () {
+        this.searchProductInfo();
+    }
+
+    searchProductInfo () {
+        const url = config.productDetailUrl;
+        const cid = this.props.cid;
+        const pid = this.props.pid;
+
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify({
+                pid: pid,
+                cid: cid
+            })
+        }).then(res => res.json())
+            .then(res => {
+                this.setState({
+                    productData: res
+                })
+            });
     }
 
     render () {
+
+        if (!this.state.productData) {
+            return <View><Text>loading...</Text></View>
+        }
+
         return (
             <View style={styles.container}>
                 <ScrollView>

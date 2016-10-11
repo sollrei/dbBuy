@@ -12,8 +12,12 @@ import {
 } from 'react-native';
 
 import {styles} from '../styleSheet';
+
 import ProductDetail from './productDetail';
+
 import config from '../data/config';
+
+import BackArrow from '../common/backArrow';
 
 const {width} = Dimensions.get('window');
 
@@ -41,6 +45,27 @@ export default class ProductList extends Component {
         this.productKey = '';
         this.loading = false;
         this.hasMore = true;
+    }
+
+    componentWillMount () {
+
+        const productKey = this.props.productKey;
+
+        this.searchProduct({
+            filter: {
+                proname: productKey
+            },
+            skip: 0
+        });
+
+    }
+
+    componentDidUpdate () {
+        console.log(this.skip, this.state.data.length);
+
+        if (this.skip === 0 && this.state.data.length) {
+            this.scrollTop();
+        }
     }
 
     searchProduct (filterObject = {
@@ -87,26 +112,48 @@ export default class ProductList extends Component {
         this.refs.myList.scrollTo({y: 0, animated: false});
     }
 
-    componentWillMount () {
-
-        const productKey = this.props.productKey;
-
-        this.searchProduct({
-            filter: {
-                proname: productKey
-            },
-            skip: 0
-        });
-
-    }
-
-    componentDidUpdate () {
-        console.log(this.skip, this.state.data.length);
-
-        if (this.skip === 0 && this.state.data.length) {
-            this.scrollTop();
+    changeShowType = () => {
+        if (this.state.showType === 'grid') {
+            this.setState({
+                showType: 'list',
+                dataSource: this.ds.cloneWithRows(this.state.data),
+                itemType: 'listItem'
+            })
+        } else {
+            this.setState({
+                showType: 'grid',
+                dataSource: this.ds.cloneWithRows(this.state.data),
+                itemType: 'gridItem'
+            })
         }
-    }
+    };
+
+    renderNewScene = (pid, cid) => {
+
+        this.props.navigator.push({
+            title: '产品详情',
+            component: ProductDetail,
+            navigationBarHidden: false,
+            passProps: {
+                pid: pid,
+                cid: cid
+            }
+        })
+    };
+
+    loadMore = () => {
+
+        if (!this.loading && this.hasMore) {
+            this.skip = this.skip + 1;
+            this.searchProduct({
+                filter: {
+                    proname: this.productKey
+                },
+                skip: this.skip * 10
+            })
+        }
+
+    };
 
     renderRow = (rowData) => {
 
@@ -129,7 +176,7 @@ export default class ProductList extends Component {
         return (
             <TouchableOpacity
                 style={sty[this.state.itemType]}
-                onPress={this.renderNewScene}
+                onPress={this.renderNewScene.bind(this, rowData.pid, rowData.cid)}
             >
                 <View style={{padding: 2}}>
                     <Image
@@ -148,31 +195,9 @@ export default class ProductList extends Component {
         )
     };
 
-    renderNewScene = () => {
-        this.props.navigator.push({
-            title: '产品详情',
-            component: ProductDetail,
-            navigationBarHidden: false
-        })
-    };
-
-    loadMore = () => {
-
-        if (!this.loading && this.hasMore) {
-            this.skip = this.skip + 1;
-            this.searchProduct({
-                filter: {
-                    proname: this.productKey
-                },
-                skip: this.skip * 10
-            })
-        }
-
-    };
-
     render () {
 
-        let dom;
+        let dom, icon;
 
         if (this.state.loaded) {
             if (this.state.data.length ) {
@@ -185,9 +210,7 @@ export default class ProductList extends Component {
                     ref="myList"
                 />
             } else {
-               dom = <View style={{alignItems: 'center', justifyContent: 'center', height: 100}}>
-                   <Text>没有数据咯~</Text>
-               </View>
+               dom = <View style={sty.emptyInfo}><Text>没有搜到数据</Text></View>
             }
         } else {
             dom = <ActivityIndicator
@@ -197,20 +220,17 @@ export default class ProductList extends Component {
             />
         }
 
+        if (this.state.showType === 'grid') {
+            icon = <Image source={require('image!icon_list')} />;
+        } else {
+            icon = <Image source={require('image!icon_grid')} />
+        }
+
         return (
             <View style={styles.container}>
-                <View style={sty.header}>
-                    <TouchableOpacity
-                        style={sty.back}
-                        onPress={() => {
-                            this.props.navigator.pop();
-                        }}
-                    >
-                        <Image
-                            source={require('image!arrow_left')}
-                        />
-                    </TouchableOpacity>
-                    <View style={sty.headerSearch}>
+                <View style={styles.header}>
+                    <BackArrow navigator={this.props.navigator} />
+                    <View style={styles.headerSearch}>
                         <TextInput
                             style={{flex: 1}}
                             defaultValue={this.props.productKey}
@@ -226,27 +246,10 @@ export default class ProductList extends Component {
                         />
                     </View>
                     <TouchableOpacity
-                        style={sty.changeType}
-                        onPress={() => {
-                            if (this.state.showType === 'grid') {
-                                this.setState({
-                                    showType: 'list',
-                                    dataSource: this.ds.cloneWithRows(this.state.data),
-                                    itemType: 'listItem'
-                                })
-                            } else {
-                                this.setState({
-                                    showType: 'grid',
-                                    dataSource: this.ds.cloneWithRows(this.state.data),
-                                    itemType: 'gridItem'
-                                })
-                            }
-
-                        }}
+                        style={styles.changeType}
+                        onPress={this.changeShowType}
                     >
-                        <Image
-                            source={require('image!icon_grid')}
-                        />
+                        {icon}
                     </TouchableOpacity>
                 </View>
                 <View style={sty.filter}>
@@ -281,37 +284,10 @@ const sty = StyleSheet.create({
         flex: 1,
         alignItems: 'center'
     },
-    header: {
-        height: 44,
-        borderBottomWidth: 1,
-        borderBottomColor: '#c0c0c0',
-        marginTop: 22,
-        alignItems: 'center',
-        flexDirection: 'row'
-    },
-    headerSearch: {
-        height: 28,
-        backgroundColor: '#fff',
-        position: 'absolute',
-        left: 44,
-        right: 41,
-        top: 8,
-        borderRadius: 5,
-        paddingLeft: 15
-    },
-    changeType: {
-        height: 44,
-        width: 40,
+    emptyInfo: {
         alignItems: 'center',
         justifyContent: 'center',
-        position: 'absolute',
-        right: 0
-    },
-    back: {
-        width: 40,
-        height: 44,
-        alignItems: 'center',
-        justifyContent: 'center'
+        height: 100
     },
     proInfo: {
         padding: 10,

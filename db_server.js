@@ -27,6 +27,43 @@ function findProductList (db, filter, callback, skip) {
             $match: filter
         },{
             $skip: skip
+        // },{
+        //     $lookup: {
+        //         from: 'gc_company',
+        //         localField: 'cid',
+        //         foreignField: 'cid',
+        //         as: 'cominfo'
+        //     }
+        },{
+            $limit: 10
+        },{
+            $project: {
+                proname: 1,
+                cid: 1,
+                pid: 1,
+                picurl: 1
+                // ,
+                // 'cominfo.comname': 1
+            }
+        }
+    ]).toArray(function(err,docs){
+        if(err) throw  err;
+        else{
+            callback && callback(docs);
+            db.close();
+        }
+    });
+}
+
+
+function findProductDetail (db, filter, callback, skip) {
+    console.log('find collection:pd_info');
+
+    const collection = db.collection('pd_info');
+
+    collection.aggregate([
+        {
+            $match: filter
         },{
             $lookup: {
                 from: 'gc_company',
@@ -35,11 +72,11 @@ function findProductList (db, filter, callback, skip) {
                 as: 'cominfo'
             }
         },{
-            $limit: 10
+            $limit: 1
         },{
             $project: {
                 proname: 1,
-                cid: 1,
+                pid: 1,
                 picurl: 1,
                 'cominfo.comname': 1
             }
@@ -52,6 +89,10 @@ function findProductList (db, filter, callback, skip) {
         }
     });
 }
+
+
+
+
 
 // ----------------- http server ---------------- //
 
@@ -79,6 +120,13 @@ function search (filter, type, response, skip) {
         if (type === 'product') {
 
             findProductList(db, newFilter, (docs) => {
+                response.write(JSON.stringify(docs));
+                response.end();
+            }, skip);
+
+        } else if (type === 'pddetail') {
+
+            findProductDetail(db, newFilter, (docs) => {
                 response.write(JSON.stringify(docs));
                 response.end();
             }, skip);
@@ -115,24 +163,21 @@ const requestHandler = (request, response) => {
 
         request.addListener("end", function () {
             var query = JSON.parse(postData),
-                pathName = parsedUrl.pathname;
+                pathName = parsedUrl.pathname || '';
 
-            if (pathName) {
-                if (pathName === '/product/') {
-
-
-
+            switch (pathName) {
+                case '/product/':
                     search(query.filter, 'product', response, query.skip);
-
-                } else if (pathName === '/company/') {
-
+                    break;
+                case '/company/':
                     search(query, 'company', response);
-
-                } else if (pathName === '/hot/') {
-
+                    break;
+                case '/hot/':
                     search(query, 'hot', response);
-
-                }
+                    break;
+                case '/pddetail/':
+                    search(query, 'pddetail', response);
+                    break;
             }
         });
     }
