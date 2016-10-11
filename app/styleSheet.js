@@ -37,6 +37,47 @@ export const styles = StyleSheet.create({
     ft17: {
         fontSize: 17
     },
+    // header search
+    header: {
+        height: 44,
+        borderBottomWidth: 1,
+        borderBottomColor: '#c0c0c0',
+        marginTop: 22,
+        alignItems: 'center',
+        flexDirection: 'row'
+    },
+    headerSearch: {
+        height: 28,
+        backgroundColor: '#fff',
+        position: 'absolute',
+        left: 44,
+        right: 56,
+        top: 8,
+        borderRadius: 5,
+        paddingLeft: 10
+    },
+    changeType: {
+        height: 44,
+        width: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        right: 0
+    },
+    back: {
+        width: 40,
+        height: 44,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    searchBtn: {
+        position: 'absolute',
+        right: 0,
+        width: 56,
+        height: 44,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
     // index
     topWrap: {
         flex: 1

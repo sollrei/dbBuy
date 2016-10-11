@@ -1,17 +1,16 @@
 import React, {Component} from 'react';
 import {
     View,
-    ListView,
-    ActivityIndicator,
     Image,
     Text,
     TextInput,
     TouchableOpacity,
-    StyleSheet
+    StyleSheet,
+    ScrollView,
+    Navigator
 } from 'react-native';
 
 import ProductList from './productList';
-
 import {styles} from '../styleSheet';
 
 export default class ProductSearch extends Component {
@@ -19,31 +18,122 @@ export default class ProductSearch extends Component {
     constructor (props) {
         super(props);
         this.state = {
-            key: ''
+            key: '',
+            historyData: []
+        };
+
+        this.searchProduct = this.searchProduct.bind(this);
+        this.clearLocalHistory = this.clearLocalHistory.bind(this);
+
+    }
+
+    componentWillMount () {
+        // this.getLocalData();
+        console.log('productSearch: componentWillMount');
+
+        this.getLocalHistory();
+
+    }
+
+    getLocalHistory () {
+        storage.load({
+            key: 'history'
+        }).then(ret => {
+
+            console.log('get local search history:', ret);
+
+            if (ret) {
+                this.setState({
+                    historyData: ret
+                });
+            }
+
+        }).catch(err => {
+            console.log(err.name);
+        });
+    }
+
+    clearLocalHistory () {
+        storage.remove({
+            key: 'history'
+        });
+
+        this.setState({
+            historyData: []
+        });
+    }
+
+    // getLocalData = async () => { };
+
+    checkSame (text) {
+        let arr = this.state.historyData,
+            hasSame = false;
+
+        if (arr.length) {
+            for (let i = 0,l = arr.length; i < l; i += 1) {
+                if (arr[i] === text) {
+                    hasSame = true;
+                    arr.splice(i, 1);
+                    arr.unshift(text);
+                    break;
+                }
+            }
         }
+
+        return hasSame;
     }
 
     searchProduct (text) {
 
+        console.log('search product');
+
         if (text) {
+
+            if (!this.checkSame(text)) {
+                this.state.historyData.unshift(text);
+            }
+            
+            storage.save({
+                key: 'history',
+                rawData: this.state.historyData
+            });
+
             this.props.navigator.push({
                 title: '搜索结果',
                 component: ProductList,
+                sceneConfig: Navigator.SceneConfigs.FloatFromBottom,
                 passProps: {
                     productKey: text
                 }
             });
+
         } else {
 
         }
     }
 
+    renderItem () {
+        return this.state.historyData.map((item, index) =>
+            <TouchableOpacity
+                style={[sty.hisRow]}
+                key={index}
+                onPress={() => {
+                    this.searchProduct(item)
+                }}
+            >
+                <Text style={sty.hisText}>{item}</Text>
+            </TouchableOpacity>)
+    }
+
     render () {
+
+        let dom = this.renderItem();
+
         return (
             <View style={styles.container}>
-                <View style={sty.header}>
+                <View style={styles.header}>
                     <TouchableOpacity
-                        style={sty.back}
+                        style={styles.back}
                         onPress={() => {
                             this.props.navigator.pop();
                         }}
@@ -52,7 +142,7 @@ export default class ProductSearch extends Component {
                             source={require('image!arrow_left')}
                         />
                     </TouchableOpacity>
-                    <View style={sty.headerSearch}>
+                    <View style={styles.headerSearch}>
                         <TextInput
                             style={{flex: 1}}
                             returnKeyType="search"
@@ -68,7 +158,7 @@ export default class ProductSearch extends Component {
                         />
                     </View>
                     <TouchableOpacity
-                        style={sty.searchBtn}
+                        style={styles.searchBtn}
                         onPress={() => {
                             this.searchProduct(this.state.key);
                         }}
@@ -76,52 +166,37 @@ export default class ProductSearch extends Component {
                         <Text style={[styles.primaryColor, styles.ft16]}>查询</Text>
                     </TouchableOpacity>
                 </View>
+                <ScrollView
+                    automaticallyAdjustContentInsets={false}
+                >
+                    {dom}
+                    <TouchableOpacity
+                        style={sty.hisClear}
+                        onPress={this.clearLocalHistory}
+                    >
+                        <Text style={styles.primaryColor}>清空历史记录</Text>
+                    </TouchableOpacity>
+                </ScrollView>
             </View>
         )
     }
-
-
 }
 
-
 const sty = StyleSheet.create({
-    header: {
-        height: 44,
-        borderBottomWidth: 1,
-        borderBottomColor: '#c0c0c0',
-        marginTop: 22,
-        alignItems: 'center',
-        flexDirection: 'row'
-    },
-    headerSearch: {
-        height: 28,
+    hisRow: {
+        height: 40,
         backgroundColor: '#fff',
-        position: 'absolute',
-        left: 44,
-        right: 56,
-        top: 8,
-        borderRadius: 5,
-        paddingLeft: 10
-    },
-    changeType: {
-        height: 44,
-        width: 40,
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
-        position: 'absolute',
-        right: 0
+        paddingLeft: 12,
+        marginBottom: 1
     },
-    back: {
-        width: 40,
-        height: 44,
-        alignItems: 'center',
-        justifyContent: 'center'
+    hisText: {
+        fontSize: 15
     },
-    searchBtn: {
-        position: 'absolute',
-        right: 0,
-        width: 56,
-        height: 44,
+    hisClear: {
+        height: 45,
+        backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center'
     }

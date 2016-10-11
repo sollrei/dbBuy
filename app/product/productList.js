@@ -69,7 +69,9 @@ export default class ProductList extends Component {
 
                 let data = res;
 
-                if (filterObject.skip !== 0) { data = this.state.data.concat(res);}
+                if (filterObject.skip !== 0) {
+                    data = this.state.data.concat(res);
+                }
 
                 this.setState({
                     dataSource: this.ds.cloneWithRows(data),
@@ -77,7 +79,12 @@ export default class ProductList extends Component {
                     loaded: true,
                     data: data
                 });
+
             });
+    }
+
+    scrollTop () {
+        this.refs.myList.scrollTo({y: 0, animated: false});
     }
 
     componentWillMount () {
@@ -91,6 +98,14 @@ export default class ProductList extends Component {
             skip: 0
         });
 
+    }
+
+    componentDidUpdate () {
+        console.log(this.skip, this.state.data.length);
+
+        if (this.skip === 0 && this.state.data.length) {
+            this.scrollTop();
+        }
     }
 
     renderRow = (rowData) => {
@@ -167,6 +182,7 @@ export default class ProductList extends Component {
                     dataSource={this.state.dataSource}
                     renderRow={this.renderRow}
                     onEndReached={this.loadMore}
+                    ref="myList"
                 />
             } else {
                dom = <View style={{alignItems: 'center', justifyContent: 'center', height: 100}}>

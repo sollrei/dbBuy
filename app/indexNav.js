@@ -9,8 +9,8 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import {appStore} from './store/reducer';
-import Storage from 'react-native-storage';
 
+import Storage from 'react-native-storage';
 
 const cs = applyMiddleware(thunk)(createStore);
 

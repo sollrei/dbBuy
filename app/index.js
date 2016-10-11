@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 
 import Company from './company/company';
 import Product from './product/product';
-import More from './more/more';
 import Chat from './chat/chat';
 import My from './my/my';
 

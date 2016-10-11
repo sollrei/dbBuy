@@ -43,7 +43,7 @@ export default class Product extends Component {
                                     })
                                 }}
                             >
-                                <Text style={styles.input}>请输入产品名称啥的</Text>
+                                <Text style={styles.input}>请输入产品名称</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={styles.iconWrap}>
