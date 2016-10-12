@@ -44,11 +44,44 @@ export default class ProductDetail extends Component {
             })
         }).then(res => res.json())
             .then(res => {
+
                 this.setState({
-                    productData: res
+                    productData: res[0]
                 })
             });
     }
+
+    renderImage () {
+        try {
+            let pic = JSON.parse(this.state.productData.picurl);
+
+            return pic.map((item, index) => {
+
+                let img = {uri: 'https:' + item};
+
+                return <View style={sty.proImage} key={index} >
+                    <Image
+                        style={{height: 200, width: screenWidth}}
+                        source={img}
+                        resizeMode='contain'
+                    />
+                </View>
+
+            });
+
+        } catch (err) {
+
+            return <View style={sty.proImage}>
+                <Image
+                    style={{height: 200, width: screenWidth}}
+                    source={{uri: 'https://img10.cn.gcimg.net/v1/pro/1/T1.jpg-350x350.jpg'}}
+                    resizeMode='contain'
+                    key={index}
+                />
+            </View>;
+        }
+    }
+
 
     render () {
 
@@ -56,29 +89,20 @@ export default class ProductDetail extends Component {
             return <View><Text>loading...</Text></View>
         }
 
+        const imgDom = this.renderImage();
+
         return (
             <View style={styles.container}>
-                <ScrollView>
+                <ScrollView style={{paddingTop: 65}}>
                     <Swiper height={200}>
-                        <View style={sty.proImage}>
-                            <Image
-                                style={{height: 200, width: screenWidth}}
-                                source={{uri: 'https://img10.cn.gcimg.net/gcwthird/day_20160809/256c4067e3i2edebcada9l88a9b37f57.jpg-350x350.jpg'}}
-                                resizeMode='contain'
-                            />
-                        </View>
-                        <View style={sty.proImage}>
-                            <Image
-                                style={{height: 200, width: screenWidth}}
-                                source={{uri: 'https://img10.cn.gcimg.net/gcwthird/day_20160809/8bba6bde4dd08c80443f2xc82983de94.jpg-normalone'}}
-                                resizeMode='contain'
-                            />
-                        </View>
+                        {imgDom}
                     </Swiper>
                     <View style={sty.proTitle}>
-                        <Text style={[styles.ft17, sty.proTitleText]}>小米智能插线板插座排插 带USB充电独立开关拖线板插板接线板插排</Text>
+                        <Text style={[styles.ft17, sty.proTitleText]}>
+                            {this.state.productData.proname}
+                            </Text>
                         <View style={sty.proPrice}>
-                            <Text style={[styles.primaryColor, sty.proPriceText]}>¥ 49.00 </Text>
+                            <Text style={[styles.primaryColor, sty.proPriceText]}>价格面议</Text>
                             <Text style={[sty.proPriceCity, styles.darkColor]}>广东深圳</Text>
                         </View>
                     </View>
