@@ -5,7 +5,9 @@ import {
     Image,
     Text,
     TouchableOpacity,
+    TouchableWithoutFeedback,
     Dimensions,
+    Animated,
     StyleSheet
 } from 'react-native';
 
@@ -23,7 +25,10 @@ export default class ProductDetail extends Component {
         super(props);
 
         this.state = {
-            productData: ''
+            productData: '',
+            fadeAnimate: new Animated.Value(0),
+            animate: new Animated.Value(0),
+            fav: false
         }
     }
 
@@ -91,6 +96,19 @@ export default class ProductDetail extends Component {
 
         const imgDom = this.renderImage();
 
+        let favIcon;
+        if (this.state.fav) {
+            favIcon = <Image
+                source={require('image!faved')}
+                style={{height: 20, width: 20}}
+            />;
+        } else {
+            favIcon = <Image
+                source={require('image!fav')}
+                style={{height: 20, width: 20}}
+            />;
+        }
+
         return (
             <View style={styles.container}>
                 <ScrollView style={{paddingTop: 65}}>
@@ -123,6 +141,12 @@ export default class ProductDetail extends Component {
                             <Text>XMCXB01QM</Text>
                         </View>
                     </View>
+
+                    <Animated.View
+                        style={{opacity: this.state.fadeAnimate}}>
+                        <Text>test</Text>
+                    </Animated.View>
+
                 </ScrollView>
                 <View style={sty.bottom}>
                     <TouchableOpacity style={sty.bottomItem}>
@@ -132,13 +156,42 @@ export default class ProductDetail extends Component {
                         />
                         <Text style={sty.bottomText}>分享</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={sty.bottomItem}>
-                        <Image
-                            source={require('image!fav')}
-                            style={{height: 20, width: 20}}
-                        />
-                        <Text style={sty.bottomText}>收藏</Text>
-                    </TouchableOpacity>
+                    <TouchableWithoutFeedback
+                        onPress={() => {
+                            if (!this.state.fav) {
+                                this.changeAnimated();
+                            }
+                            this.setState({
+                                fav: !this.state.fav
+                            });
+                        }}
+                    >
+                        <View style={sty.bottomItem}>
+                            <Animated.View
+                                style={[{backgroundColor: 'transparent', zIndex: 10},{
+                                    transform: [{
+                                        scale: this.state.animate.interpolate({
+                                            inputRange: [0, 1],
+                                            outputRange: [1, 4],
+                                        })
+                                    },{
+                                        rotate: this.state.animate.interpolate({
+                                            inputRange: [0, 1],
+                                            outputRange: [
+                                                '0deg', '0deg'
+                                            ],
+                                        })
+                                    }],
+                                    opacity: this.state.animate.interpolate({
+                                        inputRange: [0, 1],
+                                        outputRange: [1, 0],
+                                    })
+                                }]}>
+                                {favIcon}
+                            </Animated.View>
+                            <Text style={sty.bottomText}>收藏</Text>
+                        </View>
+                    </TouchableWithoutFeedback>
                     <TouchableOpacity style={sty.bottomItem}>
                         <Image
                             source={require('image!shop')}
@@ -152,6 +205,17 @@ export default class ProductDetail extends Component {
                 </View>
             </View>
         )
+    }
+
+    changeAnimated() {
+        console.log('did mount');
+        Animated.spring(this.state.animate, {
+            toValue: 0,
+            velocity: 3,
+            tension: -10,
+            friction: 1,
+        }).start();
+
     }
 }
 

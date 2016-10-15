@@ -8,6 +8,7 @@
   "dependencies": {
     "mongodb": "^2.2.10",
     "react": "15.3.1",
+    "react-art": "^0.15.1",
     "react-native": "0.33.0",
     "react-native-camera": "git+https://github.com/lwansbrough/react-native-camera.git",
     "react-native-gifted-chat": "0.0.10",
@@ -15,6 +16,7 @@
     "react-native-maps": "^0.8.2",
     "react-native-open-share": "git+https://github.com/mozillo/react-native-open-share.git",
     "react-native-storage": "^0.1.4",
+    "react-native-svg": "^4.3.1",
     "react-native-swiper": "^1.4.11",
     "react-redux": "^4.4.5",
     "redux": "^3.6.0",
