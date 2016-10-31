@@ -8,9 +8,14 @@ function findData (db, collectionName, findOpt, callback) {
 
     const collection = db.collection(collectionName);
 
+    console.log(findOpt);
     collection.find(findOpt).limit(10).toArray(function(err,docs){
-        if(err) throw  err;
-        else{
+
+        console.log(docs);
+
+        if (err) {
+            throw  err;
+        } else {
             callback && callback(docs);
             db.close();
         }
@@ -27,13 +32,6 @@ function findProductList (db, filter, callback, skip) {
             $match: filter
         },{
             $skip: skip
-        // },{
-        //     $lookup: {
-        //         from: 'gc_company',
-        //         localField: 'cid',
-        //         foreignField: 'cid',
-        //         as: 'cominfo'
-        //     }
         },{
             $limit: 10
         },{
@@ -42,8 +40,6 @@ function findProductList (db, filter, callback, skip) {
                 cid: 1,
                 pid: 1,
                 picurl: 1
-                // ,
-                // 'cominfo.comname': 1
             }
         }
     ]).toArray(function(err,docs){
@@ -90,6 +86,34 @@ function findProductDetail (db, filter, callback, skip) {
     });
 }
 
+function findCompanyList (db, filter, callback, skip) {
+    console.log('find collection:pd_info');
+
+    const collection = db.collection('gc_company');
+
+    collection.aggregate([
+        {
+            $match: filter
+        },{
+            $skip: skip
+        },{
+            $limit: 10
+        },{
+            $project: {
+                comname: 1,
+                username: 1,
+                regcaptial: 1,
+                state: 1
+            }
+        }
+    ]).toArray(function(err,docs){
+        if(err) throw  err;
+        else{
+            callback && callback(docs);
+            db.close();
+        }
+    });
+}
 
 
 
@@ -106,6 +130,10 @@ function search (filter, type, response, skip) {
 
     if (filter.proname) {
         newFilter.proname = new RegExp(filter.proname);
+    }
+
+    if (filter.comname) {
+        newFilter.comname = new RegExp(filter.comname);
     }
 
     if (filter.name) {
@@ -131,6 +159,13 @@ function search (filter, type, response, skip) {
                 response.end();
             }, skip);
 
+        } else if (type === 'company')  {
+            findCompanyList(db, newFilter, (docs) => {
+
+                response.write(JSON.stringify(docs));
+                response.end();
+
+            }, skip || 0);
         } else {
             findData(db, type, newFilter, (docs) => {
 
@@ -139,8 +174,6 @@ function search (filter, type, response, skip) {
 
             });
         }
-
-
 
     });
 }
@@ -178,6 +211,14 @@ const requestHandler = (request, response) => {
                 case '/pddetail/':
                     search(query, 'pddetail', response);
                     break;
+                case '/user/':
+                    response.write(JSON.stringify({
+                        "name": "Jonki",
+                        "avatar": "https://i.imgur.com/n6PQYEy.png"
+                    }));
+                    response.end();
+                    break;
+
             }
         });
     }

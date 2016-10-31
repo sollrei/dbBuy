@@ -29,7 +29,7 @@ export default class Company extends Component {
     }
 
     componentWillMount () {
-        console.log('companyIndex: componentWillMount');
+        // console.log('companyIndex: componentWillMount');
     }
 
     componentDidMount () {
@@ -41,16 +41,16 @@ export default class Company extends Component {
     }
 
     shouldComponentUpdate (nextProps, nextState) {
-        console.log('companyIndex: shouldComponentUpdate');
+        // console.log('companyIndex: shouldComponentUpdate');
         return false;
     }
 
     componentWillUpdate (nextProps, nextState) {
-        console.log('companyIndex: componentWillUpdate');
+        // console.log('companyIndex: componentWillUpdate');
     }
 
     componentDidUpdate (prevProps, prevSate) {
-        console.log('companyIndex: componentDidUpdate');
+        // console.log('companyIndex: componentDidUpdate');
 
     }
 
@@ -77,7 +77,7 @@ export default class Company extends Component {
 
     render () {
 
-        console.log('companyIndex: render');
+        // console.log('companyIndex: render');
 
         return (
             <View style={styles.container}>

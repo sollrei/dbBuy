@@ -29,8 +29,6 @@ export default class SearchResult extends Component {
                 money: '100万人民币'
             }])
         };
-
-
     }
 
     componentWillMount () {

@@ -3,7 +3,7 @@ const baseUrl = 'http://192.168.12.47:1337';
 
 export default config = {
 
-    userUrl: 'http://192.168.12.47/user.json',
+    userUrl: baseUrl + '/user/',
     hotContentUrl: 'http://192.168.12.47/content.json',
 
     productSearchUrl: baseUrl + '/product/',

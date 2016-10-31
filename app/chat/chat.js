@@ -35,7 +35,7 @@ export default class Chat extends Component {
     }
 
     componentWillMount () {
-        console.log('component will mount: chat');
+        // console.log('component will mount: chat');
     }
 
     handleHorizontalScroll = (e) => {

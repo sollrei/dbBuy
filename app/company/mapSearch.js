@@ -19,6 +19,9 @@ export default class MapSearch extends Component {
 
 
     render () {
+
+        // return <View><Text>e</Text></View>
+
         return (
             <View style={styles.container}>
                 <MapView

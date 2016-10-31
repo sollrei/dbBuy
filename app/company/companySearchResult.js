@@ -49,7 +49,7 @@ export default class SearchResult extends Component {
         const companyKey = this.props.companyKey;
 
         this.searchCompany({
-            name: companyKey
+            comname: companyKey
         });
 
     }
@@ -68,7 +68,7 @@ export default class SearchResult extends Component {
     }
 
     componentDidUpdate (prevProps, prevSate) {
-        console.log('compant: componentDidUpdate', prevProps.companyKey, prevSate.data.length);
+        console.log('company: componentDidUpdate', prevProps.companyKey, prevSate.data.length);
 
     }
 
@@ -118,7 +118,7 @@ export default class SearchResult extends Component {
                             returnKeyType="search"
                             onSubmitEditing={(event) => {
                                 this.searchCompany({
-                                    name: event.nativeEvent.text
+                                    comname: event.nativeEvent.text
                                 })
                             }}
                         />
@@ -149,11 +149,11 @@ export default class SearchResult extends Component {
                                 })
                             }}
                         >
-                            <Text style={{fontSize: 17, marginBottom: 8}}>{rowData.name}</Text>
+                            <Text style={{fontSize: 17, marginBottom: 8}}>{rowData.comname}</Text>
                             <View style={sty.resultInfo}>
                                 <View>
-                                    <Text style={{color: '#666', marginBottom: 6}}>{rowData.legal}</Text>
-                                    <Text style={{color: '#666'}}>{rowData.capital}</Text>
+                                    <Text style={{color: '#666', marginBottom: 6}}>{rowData.username}</Text>
+                                    <Text style={{color: '#666'}}>{rowData.regcaptial}</Text>
                                 </View>
                                 <View style={sty.resultRight}>
                                     <Text style={[sty.resultRightText, {marginBottom: 6}]}>{rowData.status}</Text>

@@ -15,6 +15,7 @@ import {styles} from '../styleSheet';
 import AnimateMenuClose from '../animateComponent/menu-close';
 import AnimateButton from '../animateComponent/btn';
 import AnimateFirework from '../animateComponent/firework';
+import AnimateFav from '../animateComponent/fav';
 export default class FavCompany extends Component {
 
     constructor (props) {
@@ -34,6 +35,9 @@ export default class FavCompany extends Component {
                 <ScrollView>
                     <View style={{flex: 1,backgroundColor: '#fff'}}>
                         <AnimateFirework />
+                    </View>
+                    <View style={{flex: 1,backgroundColor: '#f2f2f2'}}>
+                        <AnimateFav />
                     </View>
                     <Text>react art playground</Text>
                     <View style={{padding: 20}}>

@@ -17,6 +17,8 @@ import config from '../data/config';
 
 import {styles} from '../styleSheet';
 
+import AnimateFav from '../animateComponent/fav';
+
 const {width: screenWidth} = Dimensions.get('window');
 
 export default class ProductDetail extends Component {
@@ -96,19 +98,6 @@ export default class ProductDetail extends Component {
 
         const imgDom = this.renderImage();
 
-        let favIcon;
-        if (this.state.fav) {
-            favIcon = <Image
-                source={require('image!faved')}
-                style={{height: 20, width: 20}}
-            />;
-        } else {
-            favIcon = <Image
-                source={require('image!fav')}
-                style={{height: 20, width: 20}}
-            />;
-        }
-
         return (
             <View style={styles.container}>
                 <ScrollView style={{paddingTop: 65}}>
@@ -167,28 +156,18 @@ export default class ProductDetail extends Component {
                         }}
                     >
                         <View style={sty.bottomItem}>
-                            <Animated.View
-                                style={[{backgroundColor: 'transparent', zIndex: 10},{
-                                    transform: [{
-                                        scale: this.state.animate.interpolate({
-                                            inputRange: [0, 1],
-                                            outputRange: [1, 4],
-                                        })
-                                    },{
-                                        rotate: this.state.animate.interpolate({
-                                            inputRange: [0, 1],
-                                            outputRange: [
-                                                '0deg', '0deg'
-                                            ],
-                                        })
-                                    }],
-                                    opacity: this.state.animate.interpolate({
-                                        inputRange: [0, 1],
-                                        outputRange: [1, 0],
-                                    })
-                                }]}>
-                                {favIcon}
-                            </Animated.View>
+                            <View style={{height: 20, width: 20, zIndex: 2}}>
+                                <AnimateFav
+                                    sty={{
+                                        transform: [{
+                                            scale: .6
+                                        }],
+                                        position: 'absolute',
+                                        left: -40,
+                                        top: -40
+                                    }}
+                                />
+                            </View>
                             <Text style={sty.bottomText}>收藏</Text>
                         </View>
                     </TouchableWithoutFeedback>

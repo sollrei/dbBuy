@@ -90,15 +90,15 @@ export default class LoginPage extends Component {
                             });
 
                             fetch(config.userUrl, {
-                                headers: {
-                                    'Accept': 'application/json',
-                                    'Content-Type': 'application/json'
-                                }
+                                method: 'POST',
+                                body: JSON.stringify({})
                             })
-                                .then((response) => response.json())
+                               .then((response) => {
+                                   return response.json();
+                               })
                                 .then((responseJson) => {
+
                                     setTimeout(() => {
-                                        console.log('login event', responseJson);
 
                                         this.props.dispatch(actions.setLogin(responseJson));
 
@@ -109,7 +109,8 @@ export default class LoginPage extends Component {
                                         this.props.navigator.pop();
 
                                     }, 1000);
-                                })
+
+                                });
                         }}
                     >
                         <Text style={styles.submitText}>登录</Text>

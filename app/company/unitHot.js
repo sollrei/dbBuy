@@ -46,9 +46,11 @@ export default class Hot extends Component {
             method: 'POST',
             body: JSON.stringify({})
         })
-            .then((res) => res.json())
             .then((res) => {
-                    console.log('get http & change state');
+                return  res.json();
+            })
+            .then((res) => {
+                    // console.log('get http & change state');
                     this.setState({
                         hotData: res,
                         isLoading: false
@@ -80,7 +82,7 @@ export default class Hot extends Component {
 
     render () {
 
-        console.log('unitHot: render');
+        // console.log('unitHot: render');
 
         if (this.state.isLoading) {
             return <View style={styles.hotWrap}>
